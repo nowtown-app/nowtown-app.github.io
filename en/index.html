@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en" data-tone="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>document.documentElement.classList.add('js');</script>
+<title>Nowtown: Focus Timer That Builds a Tiny City (iPhone)</title>
+<meta name="description" content="Nowtown is a focus timer for iPhone that builds a tiny diorama city while you focus. Seven cities with real weather and local time. Coming December 1, 2026. Pre-order on the App Store.">
+<link rel="canonical" href="https://kaitoiwaki.github.io/nowtown-site/en/">
+<link rel="alternate" hreflang="ja" href="https://kaitoiwaki.github.io/nowtown-site/">
+<link rel="alternate" hreflang="en" href="https://kaitoiwaki.github.io/nowtown-site/en/">
+<link rel="alternate" hreflang="x-default" href="https://kaitoiwaki.github.io/nowtown-site/">
+<meta name="theme-color" content="#101320">
+<meta name="apple-itunes-app" content="app-id=6824274766">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kaitoiwaki.github.io/nowtown-site/en/">
+<meta property="og:title" content="Nowtown: Focus Timer That Builds a Tiny City">
+<meta property="og:description" content="Time you focus becomes a city. A focus timer for iPhone that builds a tiny diorama city while you focus. Coming December 1, 2026. Pre-order on the App Store.">
+<meta property="og:image" content="https://kaitoiwaki.github.io/nowtown-site/og-en.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../favicon.png">
+<link rel="apple-touch-icon" href="../icon-180.png">
+<link rel="preload" href="../assets/fonts/jost-300.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+// 最初の空（S0）のくっきりした絵を先に読む。Save-Data のときは読まない（ぼかした絵だけ）
+(function(d,p){if(navigator.connection&&navigator.connection.saveData)return;[['(min-aspect-ratio: 2/3)','land',1600,2560],['(max-aspect-ratio: 2/3)','port',720,1080]].forEach(function(v){var l=d.createElement('link');l.rel='preload';l.as='image';l.type='image/avif';l.media=v[0];l.setAttribute('imagesizes','100vw');l.setAttribute('fetchpriority','high');l.setAttribute('imagesrcset',p+'s0-'+v[1]+'-sharp-'+v[2]+'.avif '+v[2]+'w, '+p+'s0-'+v[1]+'-sharp-'+v[3]+'.avif '+v[3]+'w');d.head.appendChild(l);});})(document,'../assets/sky/');
+</script>
+<link rel="stylesheet" href="../assets/site.css?v=271fb46b">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Nowtown","operatingSystem":"iOS 18","applicationCategory":"ProductivityApplication","description":"A focus timer for iPhone that builds a tiny diorama city while you focus.","url":"https://kaitoiwaki.github.io/nowtown-site/en/","installUrl":"https://apps.apple.com/app/id6824274766","datePublished":"2026-12-01","inLanguage":"en","offers":{"@type":"Offer","price":0,"priceCurrency":"JPY"}}
+</script>
+<script src="../assets/site.js?v=91e20471" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="sky" aria-hidden="true">
+  <div class="sky__soft">
+    <div class="sky__layer" data-i="0"><picture><source media="(max-aspect-ratio: 2/3)" srcset="../assets/sky/s0-port-soft.webp"><img src="../assets/sky/s0-land-soft.webp" alt="" decoding="async" fetchpriority="high"></picture></div>
+    <div class="sky__layer" data-i="1"><picture><source media="(max-aspect-ratio: 2/3)" srcset="../assets/sky/s1-port-soft.webp"><img src="../assets/sky/s1-land-soft.webp" alt="" decoding="async"></picture></div>
+    <div class="sky__layer" data-i="2"><picture><source media="(max-aspect-ratio: 2/3)" srcset="../assets/sky/s2-port-soft.webp"><img src="../assets/sky/s2-land-soft.webp" alt="" decoding="async"></picture></div>
+    <div class="sky__layer" data-i="3"><picture><source media="(max-aspect-ratio: 2/3)" srcset="../assets/sky/s3-port-soft.webp"><img src="../assets/sky/s3-land-soft.webp" alt="" decoding="async"></picture></div>
+    <div class="sky__layer" data-i="4"><picture><source media="(max-aspect-ratio: 2/3)" srcset="../assets/sky/s4-port-soft.webp"><img src="../assets/sky/s4-land-soft.webp" alt="" decoding="async"></picture></div>
+    <div class="sky__layer" data-i="5"><picture><source media="(max-aspect-ratio: 2/3)" srcset="../assets/sky/s5-port-soft.webp"><img src="../assets/sky/s5-land-soft.webp" alt="" decoding="async"></picture></div>
+    <div class="sky__layer" data-i="6"><picture><source media="(max-aspect-ratio: 2/3)" srcset="../assets/sky/s6-port-soft.webp"><img src="../assets/sky/s6-land-soft.webp" alt="" decoding="async"></picture></div>
+  </div>
+  <div class="sky__sharp">
+    <div class="sky__layer" data-i="0" data-s="0"></div>
+    <div class="sky__layer" data-i="1" data-s="1"></div>
+    <div class="sky__layer" data-i="2"></div>
+    <div class="sky__layer" data-i="3" data-s="3"></div>
+    <div class="sky__layer" data-i="4" data-s="4"></div>
+    <div class="sky__layer" data-i="5" data-s="5"></div>
+    <div class="sky__layer" data-i="6" data-s="6"></div>
+  </div>
+  <div class="sky__scrim"></div>
+</div>
+
+<header class="hd">
+  <a class="hd__brand" href="./">Nowtown</a>
+  <p class="hd__clock" aria-hidden="true"><span class="hd__city">TOKYO </span><b data-clock>05:40</b> · <span data-wx>CLEAR</span></p>
+  <nav class="hd__nav" aria-label="On this page">
+    <a class="hd__link" href="#how">How it works</a>
+    <a class="hd__link" href="#price">Price</a>
+    <a class="hd__link" href="#faq">Support</a>
+    <a class="hd__lang" href="../" hreflang="ja" lang="ja">日本語</a>
+    <a class="hd__cta" href="https://apps.apple.com/app/id6824274766"><span data-pre>Pre-order</span><span data-post hidden>Get</span></a>
+  </nav>
+</header>
+
+<main id="main">
+
+<section class="hero" id="top" data-stage="0" data-sharp="1">
+  <div class="hero__col">
+    <p class="label">Focus timer for iPhone</p>
+    <h1 class="hero__h1">Time you focus becomes a city.</h1>
+    <p class="hero__lead hero__lead--full">Nowtown is a focus timer for study and work. Start the timer and construction begins. A tiny diorama city goes up with every minute you focus.</p>
+    <p class="hero__lead hero__lead--short">A focus timer for study and work. A tiny diorama city goes up with every minute you focus.</p>
+    <div class="date">
+      <p class="label date__label">Release 2026</p>
+      <p class="date__day"><span class="date__n">December 1</span></p>
+      <p class="date__status"><span data-pre>Pre-order now on the App Store</span><span data-post hidden>Available now on the App Store</span></p>
+    </div>
+    <div class="cta" id="hero-cta">
+      <a class="store" href="https://apps.apple.com/app/id6824274766"><span data-pre>Pre-order on the App Store</span><span data-post hidden>Download on the App Store</span><span class="store__arrow" aria-hidden="true">→</span></a>
+      <p class="cta__note">Free to download · No ads · iPhone (iOS 18 or later)</p>
+      <p class="date__line"><span data-pre>Coming December 1, 2026 · Pre-order now</span><span data-post hidden>Available since December 1, 2026</span></p>
+    </div>
+  </div>
+  <p class="plate hero__plate"><span class="plate__no">Nº 01 — TOKYO</span><span class="plate__sub">Complete in 7 hours of focus</span></p>
+  <a class="hero__down" href="#how" aria-label="How it works">↓</a>
+</section>
+
+<section class="how" id="how" data-stage="1" data-sharp="0">
+  <h2 class="h2 how__h2">Set it. Focus. Watch it rise.</h2>
+  <div class="step">
+    <figure class="phone"><picture><source type="image/avif" srcset="../assets/shots/home-en-440.avif 440w, ../assets/shots/home-en-660.avif 660w" sizes="(min-width: 1024px) 300px, (min-width: 407px) 236px, 58vw"><img src="../assets/shots/home-en-440.webp" srcset="../assets/shots/home-en-440.webp 440w, ../assets/shots/home-en-660.webp 660w" sizes="(min-width: 1024px) 300px, (min-width: 407px) 236px, 58vw" width="440" height="956" loading="lazy" decoding="async" alt="Tokyo at 6:30 in the morning, construction just started, with the Focus 25:00 button"></picture></figure>
+    <div class="note">
+      <p class="note__label">Step 1 · 06:30</p>
+      <h3 class="note__h jpd">Set a time and start</h3>
+      <p class="note__p">Choose 5 to 120 minutes and start the timer. It works for 25-minute Pomodoros as it is.</p>
+    </div>
+  </div>
+</section>
+
+<section class="step-sec" data-stage="2" data-sharp="0">
+  <div class="step step--rev">
+    <figure class="phone"><picture><source type="image/avif" srcset="../assets/shots/focus-en-440.avif 440w, ../assets/shots/focus-en-660.avif 660w" sizes="(min-width: 1024px) 300px, (min-width: 407px) 236px, 58vw"><img src="../assets/shots/focus-en-440.webp" srcset="../assets/shots/focus-en-440.webp 440w, ../assets/shots/focus-en-660.webp 660w" sizes="(min-width: 1024px) 300px, (min-width: 407px) 236px, 58vw" width="440" height="956" loading="lazy" decoding="async" alt="Tokyo at noon on a sunny day with cranes up, and a focus timer with 24 minutes left"></picture></figure>
+    <div class="note">
+      <p class="note__label">Step 2 · 12:00</p>
+      <h3 class="note__h jpd">The city goes up while you focus</h3>
+      <p class="note__p">Buildings and landmarks rise with the time you focus. The timer keeps going with the screen off or in another app. Stop early, and what you built stays.</p>
+    </div>
+  </div>
+</section>
+
+<section class="rain">
+  <div class="rain__window" data-stage="3" data-sharp="1">
+    <p class="rain__mh" aria-hidden="true">If it rains in Tokyo, it rains in your diorama.</p>
+  </div>
+  <div class="rain__track" data-stage="3" data-sharp="1" data-sharp-m="0">
+    <div class="rain__body">
+      <div class="note rain__note">
+        <p class="note__label">Step 3 · 14:30 · Light rain</p>
+        <h3 class="note__h jpd rain__h">If it rains in Tokyo, it rains in your diorama.</h3>
+        <p class="note__p">Each diorama shows its city's current weather and local time. When it snows in London, it snows in your London.</p>
+      </div>
+      <figure class="phone rain__phone"><picture><source type="image/avif" srcset="../assets/shots/rain-en-440.avif 440w, ../assets/shots/rain-en-660.avif 660w" sizes="(min-width: 1024px) 260px, (min-width: 407px) 236px, 58vw"><img src="../assets/shots/rain-en-440.webp" srcset="../assets/shots/rain-en-440.webp 440w, ../assets/shots/rain-en-660.webp 660w" sizes="(min-width: 1024px) 260px, (min-width: 407px) 236px, 58vw" width="440" height="956" loading="lazy" decoding="async" alt="Tokyo in light rain. The app's Home screen shows the city name TOKYO and light rain at 63°F"></picture></figure>
+    </div>
+  </div>
+</section>
+
+<section class="grow-sec" id="grow" data-stage="4" data-sharp="0">
+  <div class="note grow__note">
+    <p class="note__label">Step 4 · 16:40</p>
+    <h3 class="note__h jpd">Seven hours of focus completes a city</h3>
+    <p class="note__p">With one 25-minute session a day, Tokyo is complete in about 17 days. Open the next city with the coins you earn by focusing.</p>
+  </div>
+  <div class="grow__track">
+    <div class="grow__pin">
+      <ol class="grow" aria-label="Total focus time and how Tokyo grows">
+        <li><img src="../assets/cut/b25.webp" srcset="../assets/cut/b25-260.webp 260w, ../assets/cut/b25.webp 520w, ../assets/cut/b25-1040.webp 1040w" sizes="(min-width: 1024px) 490px, 84vw" width="520" height="345" loading="lazy" decoding="async" alt="25 minutes: construction fences and a small building"><span class="grow__cap">25 min</span></li>
+        <li><img src="../assets/cut/b120.webp" srcset="../assets/cut/b120-260.webp 260w, ../assets/cut/b120.webp 520w, ../assets/cut/b120-1040.webp 1040w" sizes="(min-width: 1024px) 490px, 84vw" width="520" height="345" loading="lazy" decoding="async" alt="2 hours: the first low buildings of Tokyo"><span class="grow__cap">2 h</span></li>
+        <li><img src="../assets/cut/b240.webp" srcset="../assets/cut/b240-260.webp 260w, ../assets/cut/b240.webp 520w, ../assets/cut/b240-1040.webp 1040w" sizes="(min-width: 1024px) 490px, 84vw" width="520" height="384" loading="lazy" decoding="async" alt="4 hours: taller buildings and towers going up"><span class="grow__cap">4 h</span></li>
+        <li><img src="../assets/cut/b420.webp" srcset="../assets/cut/b420-260.webp 260w, ../assets/cut/b420.webp 520w, ../assets/cut/b420-1040.webp 1040w" sizes="(min-width: 1024px) 490px, 84vw" width="520" height="417" loading="lazy" decoding="async" alt="7 hours: Tokyo complete with its landmarks"><span class="grow__cap">7 h · Complete</span></li>
+      </ol>
+      <div class="grow__meter" aria-hidden="true">
+        <p class="grow__time"><b data-gh>0</b><i>h</i><b data-gm>25</b><i>min</i></p>
+        <ol class="grow__scale">
+          <li style="--at: .0595">25 min</li>
+          <li style="--at: .2857">2 h</li>
+          <li style="--at: .5714">4 h</li>
+          <li style="--at: 1">7 h · Complete</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dusk" id="dusk" data-stage-from="4" data-stage-to="5" data-sharp="1">
+  <div class="dusk__pin">
+    <div class="dusk__copy">
+      <p class="label dusk__label">Tokyo 16:40 → 17:20</p>
+      <h2 class="dusk__h">By dusk, the city you built lights up.</h2>
+    </div>
+  </div>
+</section>
+
+<section class="feat" id="features" data-stage="5" data-sharp="0">
+  <h2 class="h2 feat__h2">Everything a daily focus habit needs.</h2>
+  <div class="cat">
+    <div class="cat__group cat__group--city">
+      <div class="cat__head">
+        <p class="cat__label">01 — Cities</p>
+        <h3 class="cat__h">From Tokyo to seven cities</h3>
+        <p class="cat__p">Tokyo, New York, London, Paris, Dubai, Singapore and Sydney. Open them with the coins you earn.</p>
+      </div>
+      <ul class="cities" tabindex="0" aria-label="Seven cities">
+        <li><img src="../assets/cut/city-tokyo.webp" width="320" height="247" loading="lazy" decoding="async" alt=""><span>Tokyo</span></li>
+        <li><img src="../assets/cut/city-newyork.webp" width="320" height="271" loading="lazy" decoding="async" alt=""><span>New York</span></li>
+        <li><img src="../assets/cut/city-london.webp" width="320" height="221" loading="lazy" decoding="async" alt=""><span>London</span></li>
+        <li><img src="../assets/cut/city-paris.webp" width="320" height="264" loading="lazy" decoding="async" alt=""><span>Paris</span></li>
+        <li><img src="../assets/cut/city-dubai.webp" width="320" height="291" loading="lazy" decoding="async" alt=""><span>Dubai</span></li>
+        <li><img src="../assets/cut/city-singapore.webp" width="320" height="237" loading="lazy" decoding="async" alt=""><span>Singapore</span></li>
+        <li><img src="../assets/cut/city-sydney.webp" width="320" height="228" loading="lazy" decoding="async" alt=""><span>Sydney</span></li>
+      </ul>
+      <div class="cat__aside cat__aside--xmas">
+        <img class="cat__xmas" src="../assets/cut/xmas.webp" width="560" height="449" loading="lazy" decoding="async" alt="Tokyo on a December night, with a lit Christmas tree in the middle of the shopping street">
+        <div class="cat__at">
+          <h3 class="cat__ah">Seasonal events</h3>
+          <p>A Christmas tree in Tokyo in December. Each city has its seasonal scenes.</p>
+        </div>
+      </div>
+    </div>
+    <div class="cat__group cat__group--sound">
+      <div class="cat__head">
+        <p class="cat__label">02 — Sound</p>
+        <h3 class="cat__h">City sounds and focus sounds</h3>
+        <p class="cat__p">They keep playing during a session, even after you close the app.</p>
+      </div>
+      <ul class="sounds">
+        <li><img src="../assets/sound/soft-rain.svg" width="464" height="464" loading="lazy" alt=""><span>Soft rain</span></li>
+        <li><img src="../assets/sound/window-rain.svg" width="464" height="464" loading="lazy" alt=""><span>Window rain</span></li>
+        <li><img src="../assets/sound/fireplace.svg" width="464" height="464" loading="lazy" alt=""><span>Fireplace</span></li>
+      </ul>
+      <div class="cat__aside cat__aside--pomo">
+        <div class="cat__at">
+          <h3 class="cat__ah">Pomodoro-friendly</h3>
+          <p>Use 25 minutes, or any length from 5 to 120.</p>
+        </div>
+        <div class="cat__dial" aria-hidden="true">
+          <b class="cat__dial-t">25:00</b>
+          <i class="cat__dial-bar"></i>
+          <span class="cat__dial-a">5 min</span><span class="cat__dial-z">120 min</span>
+        </div>
+      </div>
+    </div>
+    <div class="cat__group cat__group--record">
+      <div class="cat__col">
+        <div class="cat__head">
+          <p class="cat__label">03 — Record</p>
+          <h3 class="cat__h">Exam countdown and study records</h3>
+          <p class="cat__p">Count down to your goal date and see your focus time by week.</p>
+        </div>
+        <img class="cat__shot" src="../assets/shots/stats-en.webp" width="600" height="632" loading="lazy" decoding="async" alt="The records screen: 46 days until the exam, 8 hours 45 minutes of focus this week, and a bar for each day">
+      </div>
+      <div class="cat__col">
+        <div class="cat__head">
+          <div class="cat__label cat__label--blank" aria-hidden="true"></div>
+          <h3 class="cat__h">Your city on the Home Screen</h3>
+          <p class="cat__p">The small widget is free. Medium and large are part of Nowtown Resident.</p>
+        </div>
+        <img class="cat__shot cat__shot--w" src="../assets/shots/widgets-en.webp" width="1137" height="600" loading="lazy" decoding="async" alt="Large, medium and small widgets showing the dioramas of Tokyo, Paris and London">
+      </div>
+    </div>
+    <div class="cat__end">
+      <h3 class="cat__h cat__h--end">No ads.</h3>
+      <p class="cat__p">Nothing that gets in the way of your focus.</p>
+    </div>
+  </div>
+</section>
+
+<section class="price" id="price" data-stage="6" data-sharp="0">
+  <h2 class="h2">Free to download.</h2>
+  <div class="plans">
+    <div class="plan">
+      <p class="plan__tag">Free</p>
+      <h3 class="plan__h">Free</h3>
+      <ul class="dots">
+        <li>Focus timer (5 to 120 minutes)</li>
+        <li>City building and seven cities (open them with coins)</li>
+        <li>Local weather and time</li>
+        <li>City sounds and focus sounds (background playback)</li>
+        <li>Basic records and exam countdown</li>
+        <li>Small widget and Lock Screen timer</li>
+        <li>No ads</li>
+      </ul>
+    </div>
+    <div class="plan plan--res">
+      <p class="plan__tag">Nowtown Resident</p>
+      <h3 class="plan__h">Nowtown Resident<span>Optional paid plan</span></h3>
+      <dl class="prices">
+        <div><dt>Monthly</dt><dd><b>¥300</b><span>/month</span></dd></div>
+        <div><dt>Yearly</dt><dd><b>¥2,400</b><span>/year</span></dd></div>
+        <div><dt>One-time</dt><dd><b>¥4,800</b><span>one-time</span></dd></div>
+      </dl>
+      <p class="plan__note">7-day free trial on the monthly and yearly plans for new subscribers. Prices shown for Japan; they vary by region.</p>
+      <ul class="dots">
+        <li>Noise sounds (layering)</li>
+        <li>Medium and large widgets</li>
+        <li>City app icons</li>
+        <li>Detailed records</li>
+        <li>Desk clock mode</li>
+        <li>Photos and time-lapses of your city</li>
+      </ul>
+    </div>
+  </div>
+  <ul class="trust">
+    <li><b>No ads</b><span>No ads on any screen.</span></li>
+    <li><b>What you build stays</b><span>Stopping early never removes buildings.</span></li>
+    <li><b>Runs with the screen off</b><span>The timer counts down to its end time.</span></li>
+    <li><b>Moves with you</b><span>Your records and cities are saved to your iCloud.</span></li>
+  </ul>
+</section>
+
+<section class="faq" data-stage="6" data-sharp="0" data-veil="0.45">
+  <h2 class="h2" id="faq">Support</h2>
+  <div class="qa">
+    <details><summary>How does the city grow?</summary><p>Buildings and landmarks are built with the time you focus in that city. Every site starts at once, and finished buildings are revealed when you end a focus session. If you stop early, what has been built stays.</p></details>
+    <details><summary>Are the weather and time real?</summary><p>Yes. The diorama shows the current weather and local time of each city (weather by Apple WeatherKit).</p></details>
+    <details><summary>How do I visit other cities?</summary><p>Open them with the coins you earn by focusing, or buy them one at a time.</p></details>
+    <details><summary>I got a new device. What happens to my history and purchases?</summary><p>Your focus history, coins, unlocked cities and building progress are also saved to your iCloud (Apple ID). If you are signed in to iCloud with the same Apple ID on your new device, they come back when you install the App. To restore purchases, tap "Restore Purchases" at the bottom of Settings in the App.</p></details>
+    <details><summary>How do I cancel my subscription?</summary><p>Go to Settings → your name → Subscriptions → Nowtown. Cancel at least 24 hours before the end of the current period to avoid the next charge.</p></details>
+    <details><summary>The widget or the Lock Screen timer does not appear</summary><p>The App requires iOS 18 or later. The Lock Screen timer (including Apple Watch) and the small widget are free for everyone. The medium and large widgets are part of Nowtown Resident (without it, they show the view and the city name only). To add a widget, touch and hold the Home Screen, tap Edit → Add Widget → Nowtown.</p></details>
+    <details><summary>Does the sound continue when I close the App?</summary><p>During a focus session, yes. If the sound button at the top right is on, the city sound and focus sounds keep playing until the session ends, even after you close the App. When you are not focusing (Home, a break, or while paused), the sound stops when you close the App.</p></details>
+    <details><summary>What is Nowtown Resident?</summary><p>Our paid plan (monthly, yearly or one-time). It includes the medium and large widgets, city app icons, detailed records, desk clock mode, photos and video of your city, and more focus sounds (noise and layering). Focusing, basic history, the small widget, the Lock Screen timer and background sound are free for everyone. Family Sharing is supported.</p></details>
+    <details><summary>Does my session continue with the screen off?</summary><p>Yes. The timer counts down to the end time, so it keeps going when the screen is off or you switch apps.</p></details>
+  </div>
+  <div class="contact">
+    <h2 class="h2 h2--s" id="contact">Contact</h2>
+    <p>For bugs or feedback, please email us with your device model, iOS version and the screen where it happened.</p>
+    <p><a class="mail" href="mailto:voidlabs.work@gmail.com">voidlabs.work@gmail.com</a></p>
+  </div>
+</section>
+
+<section class="get" id="get" data-stage="6" data-sharp="1">
+  <img class="get__icon" src="../icon-180.png" width="96" height="96" alt="Nowtown app icon" loading="lazy">
+  <h2 class="h2 get__h">Start with 25 minutes. Build a city.</h2>
+  <div class="cta">
+    <a class="store" href="https://apps.apple.com/app/id6824274766"><span data-pre>Pre-order on the App Store</span><span data-post hidden>Download on the App Store</span><span class="store__arrow" aria-hidden="true">→</span></a>
+    <p class="cta__note">Coming December 1, 2026 · Free to download · iPhone (iOS 18 or later)</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="ft" data-stage="6" data-sharp="1">
+  <nav class="ft__links" aria-label="Footer">
+    <a href="../privacy.html">Privacy</a>
+    <a href="../terms.html">Terms</a>
+    <a href="#faq">Support</a>
+    <a href="#contact">Contact</a>
+    <a href="../" hreflang="ja" lang="ja">日本語</a>
+  </nav>
+  <p class="ft__note">The sky on this page follows your scroll. In the app, each city shows its real weather and local time.</p>
+  <p class="ft__note">© 2026 Kaito Iwaki</p>
+  <p class="ft__note ft__tm">Apple, the Apple logo and iPhone are trademarks of Apple Inc., registered in the U.S. and other countries. App Store is a service mark of Apple Inc.</p>
+</footer>
+
+<div class="bar" aria-hidden="true">
+  <img class="bar__icon" src="../icon-180.png" width="36" height="36" alt="">
+  <p class="bar__text"><b>Nowtown</b><span>The focus timer that builds a city</span></p>
+  <a class="bar__btn" href="https://apps.apple.com/app/id6824274766" tabindex="-1"><span data-pre>Pre-order</span><span data-post hidden>Get</span></a>
+</div>
+</body>
+</html>

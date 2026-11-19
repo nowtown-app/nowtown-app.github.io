@@ -1,0 +1,830 @@
+/* Nowtown 公式サイト（docs/site/spec.md）。法務ページは ../style.css のまま */
+
+/* ---------- フォント（自前で配信） ---------- */
+@font-face { font-family: "Jost"; font-weight: 200; font-display: swap; src: url(fonts/jost-200.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "Jost"; font-weight: 300; font-display: swap; src: url(fonts/jost-300.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "Jost"; font-weight: 400; font-display: swap; src: url(fonts/jost-400.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 400; font-display: swap; src: url(fonts/plex-mono-400.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: swap; src: url(fonts/plex-mono-500.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+/* 日本語の見出しだけ（見出しに使う字のサブセット。英語のページでは使う字がないので読まれない） */
+@font-face { font-family: "NT Display JP"; font-weight: 300; font-display: swap; src: url(fonts/nt-display-jp-300.woff2) format("woff2"); unicode-range: U+3000-303F, U+3040-30FF, U+4E00-9FFF, U+FF00-FFEF; }
+
+/* ---------- トークン ---------- */
+:root {
+  --night: #101320;
+  --navy: #18284a;
+  --ink: #14182a;
+  --cream: #f4f0e8;
+  --brass: #d6b278;
+  --brass-d: #5e4620; /* spec の #8A6A34 では生成りの上で 4.4:1。札の中 7:1 に届くよう深くした */
+  --lamp: #ffc98a;
+  --glass: rgba(16, 19, 32, .62);
+  --glass-line: rgba(214, 178, 120, .28);
+  --muted-on-dark: rgba(244, 240, 232, .8);
+  --muted-on-cream: rgba(20, 24, 42, .70);
+  --shadow: 0 24px 60px rgba(8, 10, 20, .35);
+  --gutter: clamp(20px, 5vw, 80px);
+  --f-display: "Jost", "NT Display JP", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --f-text: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", -apple-system, BlinkMacSystemFont, sans-serif;
+  /* 空の上の文字（data-tone で切り替え） */
+  --on-sky: var(--cream);
+  --label-on-sky: var(--brass);
+  --sky-glow: 0 0 24px rgba(16, 19, 32, .35);
+  --sharp: 0;
+  --scrim: .1;
+  --edge: .16;
+  color-scheme: dark;
+}
+:root:lang(en) { --f-text: "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif; }
+:root[data-tone="dark"] { --on-sky: var(--ink); --label-on-sky: var(--brass-d); --sky-glow: 0 0 24px rgba(244, 240, 232, .4); }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: 72px; }
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--cream);
+  font: 400 16px/1.9 var(--f-text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+:lang(en) body, body:lang(en) { letter-spacing: .005em; }
+/* 日本語は文節で折り返す（対応していないブラウザは、ふつうの折り返し） */
+/* 日本語は文節の切れ目だけで改行する。切れ目には make-assets.py wbr が <wbr> を入れてある（BudouX）。
+   keep-all で、<wbr>・空白・句読点の後のほかでは折れない（iOS Safari でも同じ。Chrome だけの auto-phrase には頼らない）。
+   文節の中の空白（「5〜120 分で」など）は .nb で折らない。anywhere は、1 文節が行より長いときだけの保険 */
+:lang(ja) { line-break: strict; }
+:lang(ja) :is(p, li, dt, dd, summary, h1, h2, h3, figcaption) { word-break: keep-all; overflow-wrap: anywhere; }
+.nb { white-space: nowrap; }
+p, li, dd, summary { text-wrap: pretty; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+p, h1, h2, h3, ul, ol, dl, dd, figure { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; border-radius: 4px; }
+[hidden] { display: none !important; }
+
+.skip { position: absolute; left: 12px; top: -80px; z-index: 50; background: var(--cream); color: var(--ink); padding: 10px 16px; border-radius: 999px; text-decoration: none; font-size: 14px; }
+.skip:focus { top: 12px; }
+
+/* ---------- 空 ---------- */
+.sky { position: fixed; left: 0; right: 0; top: 0; height: 100lvh; z-index: -1; overflow: hidden; background: var(--night); }
+.sky__soft, .sky__sharp, .sky__layer, .sky__scrim { position: absolute; inset: 0; }
+.sky__layer { opacity: 0; visibility: hidden; }
+.sky__layer picture { display: flex; justify-content: center; width: 100%; height: 100%; }
+.sky__layer img { width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: 50% 45%; }
+.sky__sharp { opacity: var(--sharp); }
+.sky__sharp .is-new { transition: opacity .5s ease; }
+.sky__scrim { background: linear-gradient(90deg, rgba(16, 19, 32, var(--edge)), rgba(16, 19, 32, 0) 36%, rgba(16, 19, 32, 0) 64%, rgba(16, 19, 32, var(--edge))), rgba(16, 19, 32, var(--scrim)); }
+/* モバイル：上部の文字の下を沈める。ヒーローの言葉は箱庭の塔の先の 40px 上まで下がった（画面の 20〜37%）ので、40% までは 6 割の濃さを保ち、64% で 0 に */
+@media (max-width: 1023px) { .sky__scrim { background: linear-gradient(rgba(16, 19, 32, var(--edge)), rgba(16, 19, 32, calc(var(--edge) * .6)) 40%, rgba(16, 19, 32, 0) 64%), rgba(16, 19, 32, var(--scrim)); } }
+/* Step 3 の雨（site.js が作る canvas）。空の上、文字とスマホ画面の下。位置と大きさは site.js が、雲の下の面〜台座の下の角の箱に合わせる */
+.rain-fx { position: fixed; left: 0; top: 0; width: 0; height: 0; z-index: -1; pointer-events: none; opacity: 0; visibility: hidden; }
+html:not(.js) .sky__soft .sky__layer[data-i="6"] { opacity: 1; visibility: visible; }
+html:not(.js) .sky__sharp { display: none; }
+/* 縦長：絵（9:19.5）より背の低い画面では、下だけを切る（箱庭が上の文字に近づかないように） */
+@media (max-aspect-ratio: 2/3) { .sky__layer img { object-position: 50% 0%; } }
+/* とても横長の画面（2:1 より横長）：箱庭の上下が切れないよう、絵は高さで合わせ、左右は同じ空の色（下地）へなじませる */
+@media (min-aspect-ratio: 2/1) {
+  .sky__layer img { width: auto; height: 100%; object-fit: contain;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent); }
+}
+/* sky:begin（make-assets.py が書き換える：soft 画像の左端の列から拾った、各ステージの空の色） */
+.sky__layer[data-i="0"] { background: linear-gradient(#212d62, #8876a9, #796997, #685c84, #695d86); }
+.sky__layer[data-i="1"] { background: linear-gradient(#829dcc, #d2b5bf, #d7c6c8, #d7ccce, #d7ccce); }
+.sky__layer[data-i="2"] { background: linear-gradient(#8ebad9, #ccd3d9, #d4d7da, #d6d8db, #d6d8db); }
+.sky__layer[data-i="3"] { background: linear-gradient(#a2b0cd, #bbbec8, #c5c6cc, #c9cacf, #c9c9cf); }
+.sky__layer[data-i="4"] { background: linear-gradient(#5e78b4, #d19e90, #d3b4ab, #d0bcb7, #d0bbb7); }
+.sky__layer[data-i="5"] { background: linear-gradient(#1a1e4c, #955474, #793f5d, #5a2e4a, #5c2f4b); }
+.sky__layer[data-i="6"] { background: linear-gradient(#091e41, #2d3240, #212532, #161c29, #171c29); }
+@media (max-aspect-ratio: 2/3) {
+  .sky__layer[data-i="0"] { background: linear-gradient(#494475, #8e7aac, #60567d, #60567c, #665b84); }
+  .sky__layer[data-i="1"] { background: linear-gradient(#9aa5cb, #d6b5bd, #d7cdcf, #d7cdcf, #d7cbce); }
+  .sky__layer[data-i="2"] { background: linear-gradient(#a2c1d9, #cfd5d9, #d6d9db, #d6d9db, #d6d8db); }
+  .sky__layer[data-i="3"] { background: linear-gradient(#aeb2ca, #b6b7c3, #c6c6cc, #c6c6cc, #c4c5cb); }
+  .sky__layer[data-i="4"] { background: linear-gradient(#8383b1, #d59f8b, #cfbebb, #cebdba, #d0bbb7); }
+  .sky__layer[data-i="5"] { background: linear-gradient(#463156, #9e5978, #522944, #512944, #5d2f4b); }
+  .sky__layer[data-i="6"] { background: linear-gradient(#152648, #2f3441, #141926, #131826, #161b29); }
+}
+/* sky:end */
+
+/* ---------- 文字の部品 ---------- */
+.label, .plan__tag {
+  font: 400 12px/1.5 var(--f-mono);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.label { color: var(--label-on-sky); transition: color .4s; }
+.jpd, .h2, .hero__h1, .dusk__h { font-family: var(--f-display); }
+.h2 {
+  font-weight: 300;
+  font-size: clamp(28px, 2.6vw, 40px);
+  line-height: 1.5;
+  letter-spacing: .06em;
+  color: var(--on-sky);
+  transition: color .4s;
+  text-align: center;
+  text-wrap: balance;
+}
+:lang(en) .h2 { letter-spacing: .02em; }
+
+/* ---------- ヘッダー ---------- */
+.hd {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+  height: 56px; display: flex; align-items: center; gap: 24px;
+  padding: 0 var(--gutter);
+  color: var(--on-sky);
+  transition: background-color .3s, color .4s;
+}
+.hd.is-scrolled { background: rgba(16, 19, 32, .35); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+/* 明るい空（朝・昼）では、ink の字が読めるよう、地を生成りのガラスにする */
+:root[data-tone="dark"] .hd.is-scrolled { background: rgba(244, 240, 232, .42); }
+.hd__brand { font: 300 18px/1 "Jost", sans-serif; letter-spacing: .2em; text-decoration: none; padding: 12px 0; }
+.hd__clock {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  font: 400 12px/1 var(--f-mono); letter-spacing: .14em; white-space: nowrap;
+}
+.hd__clock b { font-weight: 400; color: var(--lamp); transition: color .4s; }
+:root[data-tone="dark"] .hd__clock b { color: #8a4a12; }
+.hd__nav { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+.hd__link, .hd__lang { font-size: 14px; text-decoration: none; padding: 12px 10px; line-height: 20px; }
+.hd__lang { font: 400 12px/20px var(--f-mono); letter-spacing: .14em; }
+.hd__link:hover, .hd__lang:hover { text-decoration: underline; text-underline-offset: 4px; }
+.hd__cta {
+  display: inline-flex; align-items: center; height: 36px; padding: 0 16px; margin-left: 8px;
+  border-radius: 999px; background: var(--cream); color: var(--ink); text-decoration: none; font-size: 13px; font-weight: 500;
+  opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s;
+}
+:root[data-tone="dark"] .hd__cta { background: var(--ink); color: var(--cream); }
+:root.cta-off .hd__cta { opacity: 1; visibility: visible; }
+/* 英語の 1024〜1279px：「TOKYO 14:30 · LIGHT RAIN」が右のナビにかかるので、都市名を外して字間を詰める */
+@media (min-width: 1024px) and (max-width: 1279px) { :lang(en) .hd__city { display: none; } :lang(en) .hd__clock { letter-spacing: .06em; } }
+
+/* ---------- App Store のボタン（公式バッジが取れなかったときの、文字のボタン） ---------- */
+.store {
+  display: inline-flex; align-items: center; gap: 12px;
+  min-height: 48px; padding: 0 22px 0 24px;
+  border-radius: 999px; background: var(--cream); color: var(--ink);
+  text-decoration: none; font-size: 15px; font-weight: 500; letter-spacing: .02em;
+  box-shadow: 0 10px 30px rgba(8, 10, 20, .25);
+  transition: transform .2s;
+}
+.store:hover { transform: translateY(-1px); }
+.store, .hd__link, .plate span, .date__status { white-space: nowrap; }
+.store__arrow { font-family: "Jost", sans-serif; font-size: 18px; line-height: 1; }
+.cta { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.cta__note { font-size: 13px; line-height: 1.7; color: var(--on-sky); opacity: .82; transition: color .4s; }
+
+/* ---------- 1. ヒーロー ---------- */
+/* PC：左の列と縦書きの見出しの上下の中心を、箱庭の中心（塔の先 0.40 と台座の下の角 0.828 のまん中、絵の高さの 0.614）にそろえる。
+   文字の重心を箱庭の高さまで下げ、上は空に明け渡す。空の絵（16:10）は cover・上下 45%（2:1 より横長は高さで合わせる） */
+.hero {
+  --iw: max(100vw, 160vh); --ih: calc(var(--iw) / 1.6); --oy: calc((100vh - var(--ih)) * 0.45);
+  --dio-c: calc(var(--oy) + 0.614 * var(--ih));
+  /* 列（ふつうの流れ・縦の中央）の中心が --dio-c に来るよう、上下の余白で中央の位置をずらす（列は位置を持たせない：縦書きの見出しの基準はヒーローのまま） */
+  position: relative; min-height: 100svh; display: flex; align-items: center;
+  padding: max(0px, 2 * var(--dio-c) - 100svh) 0 max(0px, 100svh - 2 * var(--dio-c));
+}
+@media (min-aspect-ratio: 2/1) { .hero { --iw: 160vh; --oy: 0px; } }
+/* 英語の列は高い（見出しが横書きで列の中にある。1280 幅で 547px）。背の低い PC（〜740px）では、箱庭の中心にそろえると画面の下からはみ出すので、前のとおりヘッダーの下の縦中央に */
+@media (min-width: 1024px) and (max-height: 740px) { :lang(en) .hero { padding: 56px 0 0; } }
+.hero__col {
+  width: min(30vw, 400px); margin-left: clamp(32px, 5vw, 80px);
+  display: flex; flex-direction: column; gap: 24px;
+}
+/* 縦書きの見出しは、右下の展示札（下から 40px、高さ 47px）との間を 24px 以上あける：中心は「箱庭の中心」と「100% − 111px − 見出しの高さ（8.64em）の半分」の小さいほう */
+.hero__h1 {
+  position: absolute; right: clamp(32px, 5vw, 80px); top: min(var(--dio-c), calc(100% - 111px - 4.32em)); transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  font-weight: 300; font-size: clamp(34px, 3.6vw, 56px); line-height: 1.7; letter-spacing: .08em;
+  color: var(--cream);
+  text-shadow: 0 0 24px rgba(16, 19, 32, .35);
+}
+.hero__h1 span { display: block; }
+/* 縦書きの h1・#dusk の見出しは、1 つの span が 1 列（「集中した時間が、」「街になる。」）。列の途中で折らない（1366×768 では h1 の高さが足りず「集中した／時間が、」に折れていた） */
+:lang(ja) :is(.hero__h1, .dusk__h) span { white-space: nowrap; }
+.hero__h1 span + span { margin-top: 3.2em; } /* 2 行目（左の列）は少し下げる（X 告知と同じ組み方） */
+/* ヒーローの最初のラベルは、夜明けの空のいちばん明るい帯に乗るので、真鍮ではなくランプ色（3:1 を保つ） */
+.hero__col > .label:first-child { color: var(--lamp); }
+.hero__lead { font-size: 15px; line-height: 1.9; color: var(--cream); text-shadow: 0 1px 12px rgba(16, 19, 32, .45); }
+.hero__lead--short, .date__line { display: none; }
+/* PC の日本語のリードは、列（min(30vw, 400px)）より広く、1 行 30 字前後に（箱庭の塔の左の、何もない空の上。1024 幅で 389px） */
+:lang(ja) .hero__lead--full { width: min(520px, 38vw); max-width: none; }
+.date { display: flex; flex-direction: column; }
+.date__label { padding-bottom: 12px; border-bottom: 1px solid rgba(214, 178, 120, .6); max-width: 320px; }
+.date__day { margin-top: 14px; font-weight: 300; font-size: 26px; line-height: 1.1; letter-spacing: .06em; color: var(--cream); white-space: nowrap; }
+.date__n { font: 200 72px/1 "Jost", sans-serif; letter-spacing: 0; }
+.date__status { margin-top: 10px; font-size: 18px; letter-spacing: .06em; color: var(--lamp); }
+.hero .cta { margin-top: 8px; }
+.hero .cta__note { color: var(--cream); }
+.plate {
+  position: absolute; right: clamp(32px, 5vw, 80px); bottom: 40px;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+  font: 400 12px/1.5 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--brass);
+}
+.plate__no { padding-bottom: 6px; border-bottom: 1px solid rgba(214, 178, 120, .5); }
+.plate__sub { text-transform: none; letter-spacing: .1em; color: var(--muted-on-dark); }
+.hero__down { display: none; }
+/* 英語：h1 は横書きで左の列の先頭に */
+:lang(en) .hero__h1 { position: static; transform: none; writing-mode: horizontal-tb; font-size: clamp(34px, 3.6vw, 56px); line-height: 1.15; letter-spacing: .01em; text-wrap: balance; }
+:lang(en) .hero__col { width: min(29vw, 400px); }
+:lang(en) .hero__col .label:first-child { order: -2; }
+:lang(en) .date__n { font-size: 64px; }
+:lang(en) .date__status { font-size: 17px; letter-spacing: .02em; }
+
+/* ---------- 2〜5. 手順 ---------- */
+/* 解説のもやは、文字の外へ 56px はみ出す。画面の端で切る（clip はスクロールの箱を作らないので、Step 4 と #dusk のピン留めはそのまま効く） */
+main { overflow-x: clip; }
+.how { padding: 160px var(--gutter) 80px; }
+.how__h2 { margin-bottom: 120px; }
+.step-sec { padding: 80px var(--gutter); }
+.step {
+  max-width: 1040px; margin: 0 auto;
+  display: grid; grid-template-columns: 300px minmax(0, 540px); justify-content: center; align-items: center; gap: clamp(56px, 6vw, 96px);
+}
+.step--rev { grid-template-columns: minmax(0, 540px) 300px; }
+.step--rev .phone { order: 2; }
+.step--rev .note { justify-self: end; } /* スマホ側へ寄せる */
+.phone {
+  width: 300px; padding: 8px; background: #0b0d16;
+  border-radius: 13% / 6%;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, .14), var(--shadow);
+}
+.phone img { width: 100%; border-radius: 11% / 5%; }
+/* 解説：札は使わず、空の上に直接置く（ヒーローの RELEASE 2026 や展示札と同じ作り）。
+   上から、等幅の小ラベル → 真鍮の細い罫線（左端にひし形の鋲）→ 細い見出し → 本文。後ろには輪郭のない生成りの「もや」だけ */
+.note, .grow {
+  /* 手順はどれも淡い空（S1〜S4）にあるので、空の明暗で切り替える --on-sky は使わない（切り替えの途中で読めない瞬間を作らない） */
+  --note-ink: var(--ink);
+  --note-label: var(--brass-d);
+  --note-rule: rgba(94, 70, 32, .55);
+  --note-haze: rgba(244, 240, 232, .78);
+  --note-haze-0: rgba(244, 240, 232, 0);
+}
+/* JS なし：空は夜（S6）のまま */
+html:not(.js) :is(.note, .grow) { --note-ink: var(--cream); --note-label: var(--brass); --note-rule: rgba(214, 178, 120, .5); --note-haze: rgba(16, 19, 32, .6); --note-haze-0: rgba(16, 19, 32, 0); }
+/* 本文は 540px（16px で 1 行 33 字前後）。見出しは 360px のまま（間延びさせない）。罫線は本文の幅いっぱい */
+.note { position: relative; max-width: 540px; color: var(--note-ink); }
+/* もやは、その手順のブロックの中でいちばん下に敷く（解説ごとに isolate すると、隣のスマホ画面や Step 4 の絵の上にもやがかかる） */
+.step, .rain__body, .grow-sec { isolation: isolate; }
+/* もや：淡い空の上ではほぼ見えず、ぼけた街の暗い影の上でだけ、影が白く霞む */
+.note::before, .grow::before { content: ""; position: absolute; inset: -48px -56px; z-index: -1; background: var(--note-haze); border-radius: 48px; filter: blur(24px); pointer-events: none; }
+/* PC とタブレット（600px 以上）：本文が広がったぶん、角の丸い四角のもやは「板」に見える。だ円にして、縁を広くぼかす。
+   だ円の中の 90% までは同じ濃さ（文字の四隅、とくに左上のラベルもその中に入るよう、文字の外へ 横 140px・縦 100px 広げる）、そこから外へ 0 に。さらに blur(32px)。
+   600px 未満は、もやの左右が画面の外に出て縁が見えないので、前の形のまま */
+@media (min-width: 600px) {
+  .note::before { inset: -100px -140px; border-radius: 50%; filter: blur(32px);
+    background: radial-gradient(closest-side, var(--note-haze) 90%, var(--note-haze-0)); }
+}
+.note__label, .cat__label { position: relative; padding-bottom: 12px; font: 400 12px/1.5 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--note-label); }
+:is(.note__label, .cat__label)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--note-rule); }
+/* 鋲：箱庭の台座（ひし形）の引用 */
+:is(.note__label, .cat__label)::before { content: ""; position: absolute; z-index: 1; left: 0; bottom: -2px; width: 5px; height: 5px; background: var(--note-label); transform: rotate(45deg); }
+.note__h { max-width: 360px; margin-top: 20px; font-family: var(--f-display); font-weight: 300; font-size: 28px; line-height: 1.5; letter-spacing: .06em; color: var(--note-ink); text-wrap: balance; }
+:lang(en) .note__h { font-size: 30px; line-height: 1.25; letter-spacing: .01em; }
+.note__p { margin-top: 14px; font: 400 16px/1.95 var(--f-text); color: var(--note-ink); }
+:lang(en) .note__p { font-size: 17px; line-height: 1.7; }
+
+/* 入るときに一度だけ */
+.js .reveal { opacity: 0; transform: translateY(12px); transition: opacity .5s ease, transform .5s ease; }
+.js .reveal.is-in { opacity: 1; transform: none; }
+/* 解説は自分では浮かず、子を順に出す：鋲とラベル → 罫線が左から伸びる → 見出し → 本文（もやは同時に） */
+.js :is(.note, .cat__head).reveal { opacity: 1; transform: none; transition: none; }
+.js .note.reveal::before { opacity: 0; transition: opacity .8s ease; }
+.js :is(.note, .cat__head).reveal :is(.note__label, .cat__label) { opacity: 0; transition: opacity .4s ease; }
+.js :is(.note, .cat__head).reveal :is(.note__label, .cat__label)::after { transform: scaleX(0); transform-origin: left; transition: transform .7s cubic-bezier(.2, .7, .2, 1) .08s; }
+.js :is(.note, .cat__head).reveal :is(.note__h, .note__p, .cat__h, .cat__p) { opacity: 0; transform: translateY(10px); transition: opacity .6s ease .18s, transform .6s ease .18s; }
+.js :is(.note, .cat__head).reveal :is(.note__p, .cat__p) { transition-delay: .28s; }
+.js .note.reveal.is-in::before, .js :is(.note, .cat__head).reveal.is-in :is(.note__label, .cat__label, .note__h, .note__p, .cat__h, .cat__p) { opacity: 1; transform: none; }
+.js :is(.note, .cat__head).reveal.is-in :is(.note__label, .cat__label)::after { transform: none; }
+
+/* Step 3：雨（窓） */
+.rain__window { display: none; }
+.rain__body {
+  min-height: 110vh; padding: calc(56px + 10vh) var(--gutter) 80px;
+  display: grid; grid-template-columns: auto 1fr 260px; align-items: start; gap: 40px;
+  max-width: 1600px; margin: 0 auto;
+}
+.rain__phone { width: 260px; grid-column: 3; }
+.rain__note { grid-column: 1; }
+/* PC の Step 3 は箱庭がくっきり見える「窓」。解説は、どの幅でも左上（箱庭の上の空、雲の左）に置く。
+   幅は「雲の左の端」までで、上限 540px・下限 340px。空の絵は 16:10 を cover で敷くので、雲の左の端は
+   50vw − 0.142 × max(100vw, 160vh)（絵の幅の 35.8%）。解説の左の端は、列の最大幅 1600px のぶんも見る。
+   1440×900 で 431px（27 字）、1920×1080 で 435px、1280×800 で 382px、1024×768 は下限の 340px（前と同じ）。
+   本文は、スクロールの途中で箱庭の左の角の上を通るので、もやは全部の幅で敷く（前は 1440px 以上で消していた） */
+@media (min-width: 1024px) {
+  .rain__note { width: clamp(340px, calc(50vw - 0.142 * max(100vw, 160vh) - max(var(--gutter), (100vw - 1600px) / 2 + var(--gutter)) - 12px), 540px); }
+}
+/* 1024〜1279px：スマホも細く */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .rain__body { grid-template-columns: auto 1fr 210px; }
+  .rain__phone { width: 210px; }
+}
+/* PC のピン留め（JS あり・1024px 以上・高さ 600px 以上。docs/site/spec.md の 11 章）：
+   文は左上（雲の左）、箱庭はまん中（空の絵のまま）、スマホは右下（台座の下の角とそろえる）。3 つを固定して、止まった 1 枚の絵にする。
+   .rain__track（200vh）の中で .rain__body を sticky に。site.js の保持区間（ゾーンの中央 50%）が、ちょうどピン留めの 100vh になる。
+   文とスマホの不透明度は site.js が書く --s3（ピン留めの 12vh 手前から現れ、終わりの 12vh で消える）。
+   位置は空の絵の割合から出す：絵（16:10）は cover で、上下は 45%。雲の上端 0.21、雲の左端 0.358（= 50vw − 0.142 × 絵の幅）、台座の下の角 0.828。
+   もやは敷かない（固定した文の下は淡い空だけ）。雨は雲の下だけに降るので、文にはかからない（抜く処理は無い）。
+   正方形に近い画面（1024 幅で 13:10、1280 幅以上で 11:10 より縦長）では、空の絵が横に大きく敷かれ、箱庭の右端がスマホにかかる（1024×1080 で 23px）。
+   そこでは前の形（流れる 3 列・もやあり）のまま。条件は site.js の PIN3 と同じ */
+@media (min-width: 1024px) and (min-height: 600px) and (min-aspect-ratio: 13/10), (min-width: 1280px) and (min-height: 600px) and (min-aspect-ratio: 11/10) {
+  .js .rain__track { height: 200vh; }
+  .js .rain__body {
+    --iw: max(100vw, 160vh); --ih: calc(var(--iw) / 1.6);
+    --oy: calc((100vh - var(--ih)) * 0.45);
+    --cloud-top: calc(var(--oy) + 0.21 * var(--ih));
+    --cloud-left: calc(50vw - 0.142 * var(--iw));
+    --base-bot: calc(var(--oy) + 0.828 * var(--ih));
+    --left: max(var(--gutter), calc((100vw - 1600px) / 2 + var(--gutter)));
+    position: sticky; top: 0; height: 100svh; min-height: 0; max-width: none; margin: 0; padding: 0; display: block;
+  }
+  .js .rain__note, .js .rain__phone { position: absolute; opacity: var(--s3, 1); }
+  /* 幅は雲の左の端の 12px 手前まで。下限 200px（1024×768 で 274px・1 行 17 字。縦に長い画面でも雲にかからない） */
+  .js .rain__note { left: var(--left); top: max(88px, var(--cloud-top)); width: clamp(200px, calc(var(--cloud-left) - var(--left) - 12px), 540px); max-width: none; }
+  .js .rain__note::before { display: none; }
+  .js .rain__note .note__p { text-wrap: balance; }
+  /* スマホは Step 1・2（300px）より小さい添えもの。下端は台座の下の角の高さ */
+  .js .rain__phone { right: var(--left); bottom: calc(100% - var(--base-bot)); width: clamp(176px, 13.9vw, 260px); margin: 0; }
+}
+/* とても横長の画面（2:1 より横長）：空の絵は高さで合わせる（上の「空」の @media と同じ） */
+@media (min-width: 1024px) and (min-height: 600px) and (min-aspect-ratio: 2/1) {
+  .js .rain__body { --iw: 160vh; --oy: 0px; }
+}
+
+/* Step 4：街が建つ。
+   既定は「標本の並び」（動きを減らす設定・JS なし・背の低い画面）：4 枚を同じ幅・下端そろえで並べる（台座の幅が同じなので、育ち方が建物の高さだけで読める）。
+   ピン留めして 1 台が建っていく形は、後ろの「Step 4 のピン留め」の @media の中だけ */
+.grow-sec {
+  max-width: calc(1120px + 2 * var(--gutter)); margin: 0 auto; padding: 80px var(--gutter);
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; /* 解説（本文 540px）の下に、4 枚を横に並べる */
+}
+.grow { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; align-items: end; }
+.grow img { width: 100%; }
+.grow__cap { display: block; margin-top: 10px; text-align: center; white-space: nowrap; font: 400 11px/1.5 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--note-ink); }
+.grow__meter { display: none; }
+
+/* ---------- 6. 見せ場（ピン留め） ---------- */
+.dusk { height: 220vh; }
+.dusk__pin { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+.dusk__copy {
+  position: absolute; right: clamp(32px, 5vw, 80px); top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: row-reverse; align-items: flex-start; gap: 20px;
+  opacity: var(--dusk-o, 1);
+}
+.dusk__label { writing-mode: vertical-rl; color: var(--lamp); }
+.dusk__h {
+  writing-mode: vertical-rl;
+  font-weight: 300; font-size: clamp(30px, 3vw, 46px); line-height: 1.7; letter-spacing: .08em;
+  color: var(--cream); text-shadow: 0 0 24px rgba(16, 19, 32, .4);
+}
+.dusk__h span { display: block; }
+.dusk__h span + span { margin-top: 2.4em; }
+:lang(en) .dusk__copy { flex-direction: column; align-items: flex-end; gap: 14px; width: min(28vw, 380px); text-align: right; }
+:lang(en) .dusk__label, :lang(en) .dusk__h { writing-mode: horizontal-tb; }
+:lang(en) .dusk__h { font-size: clamp(28px, 3vw, 44px); line-height: 1.25; letter-spacing: .01em; text-wrap: balance; } /* 最後の行が「up.」だけにならない */
+
+/* ---------- 7. 機能：展示の目録（docs/site/spec.md の 11 章） ----------
+   カードはやめ、空の上に直接書く（手順の解説と同じ手：等幅のラベル → 真鍮の罫線と鋲 → 見出し → 本文）。
+   7 つを 3 つの組（01 街・02 音・03 記録）にまとめ、各組に主役を 1 つ、添えものを 1 行。最後に「広告はありません。」。
+   地は区間ぜんたいを 1 枚の薄い夜で沈める（上下 120px は透明へ。板の縁を見せない）。ガラス・枠・backdrop-filter は使わない */
+.feat {
+  --note-label: var(--brass); --note-rule: rgba(214, 178, 120, .5); --cat-ink: rgba(244, 240, 232, .86);
+  padding: 160px var(--gutter) 80px;
+  background: linear-gradient(rgba(16, 19, 32, 0), rgba(16, 19, 32, .55) 120px, rgba(16, 19, 32, .55) calc(100% - 120px), rgba(16, 19, 32, 0));
+}
+.feat__h2 { margin-bottom: 64px; }
+.cat { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 112px; color: var(--cream); }
+/* PC：12 列（列の間 32px）。1120px で 1 列 64px、5 列 448px、6 列 544px */
+.cat__group { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 32px; }
+.cat__label--blank { height: 30px; } /* ラベルのない列の罫線を、隣の列の罫線と同じ高さに */
+.cat__h { margin-top: 20px; font: 300 26px/1.5 var(--f-display); letter-spacing: .06em; color: var(--cream); text-wrap: balance; }
+:lang(en) .cat__h { line-height: 1.3; letter-spacing: .01em; }
+.cat__p { margin-top: 14px; font-size: 16px; line-height: 1.9; color: var(--cat-ink); }
+:lang(en) .cat__p { font-size: 17px; line-height: 1.7; }
+/* 添えもの：上に真鍮の細線（線の上下 20px） */
+.cat__aside { padding-top: 20px; border-top: 1px solid rgba(214, 178, 120, .28); }
+.cat__ah { font-size: 17px; line-height: 1.5; font-weight: 500; letter-spacing: .04em; color: var(--cream); text-wrap: balance; }
+:lang(en) .cat__ah { letter-spacing: 0; }
+.cat__at p { margin-top: 6px; font-size: 14.5px; line-height: 1.8; color: var(--cat-ink); }
+
+/* ① 街：左に見出し（1〜5 列）、右に季節の行事（8〜12 列）、下に 7 都市の棚（1120px を 7 等分、1 つ 160px） */
+.cat__group--city .cat__head { grid-column: 1 / span 5; grid-row: 1; }
+.cat__group--city .cat__aside { grid-column: 8 / span 5; grid-row: 1; align-self: start; }
+.cat__aside--xmas { display: flex; align-items: flex-start; gap: 24px; }
+.cat__xmas { flex: none; width: 168px; border-radius: 12px; }
+.cat__at { min-width: 0; }
+.cities { grid-column: 1 / -1; grid-row: 2; margin-top: 48px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); align-items: end; }
+.cities li { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.cities img { width: 100%; }
+/* 1024〜1279px：1120px に足りず 7 等分だと 1 つ 131px になるので、160px のまま 4 つ＋3 つの 2 段に。
+   季節の行事は 5 列だと文が 1 行 9 字になるので、見出しと 6 列ずつに分け、ツリーを 128px に */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .cities { display: flex; flex-wrap: wrap; justify-content: center; gap: 32px 40px; }
+  .cities li { flex: 0 0 160px; }
+  .cat__group--city .cat__head { grid-column: 1 / span 6; }
+  .cat__group--city .cat__aside { grid-column: 7 / span 6; }
+  .cat__xmas { width: 128px; }
+}
+.cities span, .sounds span { font: 400 11px/1.4 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--brass); white-space: nowrap; }
+
+/* ② 音：左に見出しと、その 32px 下にポモドーロ。右に音の絵 3 つ（7〜12 列、168px 角、右そろえ） */
+.cat__group--sound .cat__head { grid-column: 1 / span 5; grid-row: 1; }
+.cat__group--sound .cat__aside { grid-column: 1 / span 5; grid-row: 2; margin-top: 32px; }
+.sounds { grid-column: 7 / -1; grid-row: 1 / span 2; align-self: center; display: flex; justify-content: flex-end; gap: 20px; }
+.sounds li { width: 168px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.sounds img { width: 100%; border-radius: 14px; }
+.sounds span { text-transform: none; letter-spacing: .06em; font-family: var(--f-text); font-size: 13px; color: var(--cream); }
+/* ポモドーロ：文の下に、時間の目盛り（左端 5 分・右端 120 分。25 分の位置 (25 − 5) / (120 − 5) = 17.4% に灯りの点、その真上に 25:00）。
+   Step 4 の目盛りと同じ「真鍮の目盛り」の仲間。細かい刻みは入れない。飾り（aria-hidden）で、中身は本文が言っている。
+   高さ 68px：数字 28 ／ 間 10 ／ 線の帯 9 ／ 間 6 ／ ラベル 15 */
+.cat__dial { --at: 17.4%; position: relative; width: min(100%, 360px); height: 68px; margin-top: 18px; }
+.cat__dial-t { position: absolute; left: var(--at); top: 0; transform: translateX(-50%); font: 200 28px/1 "Jost", sans-serif; letter-spacing: .02em; color: var(--cream); white-space: nowrap; }
+.cat__dial-bar { position: absolute; left: 0; right: 0; top: 38px; height: 9px;
+  background: linear-gradient(rgba(244, 240, 232, .5), rgba(244, 240, 232, .5)) left top / 1px 9px no-repeat,
+    linear-gradient(rgba(244, 240, 232, .5), rgba(244, 240, 232, .5)) right top / 1px 9px no-repeat,
+    linear-gradient(90deg, var(--lamp) var(--at), rgba(244, 240, 232, .28) var(--at)) left 4px / 100% 1px no-repeat; }
+.cat__dial-bar::after { content: ""; position: absolute; left: var(--at); top: 0; width: 9px; height: 9px; margin-left: -4.5px; border-radius: 50%; background: var(--lamp); box-shadow: 0 0 0 4px rgba(255, 201, 138, .25); }
+.cat__dial-a, .cat__dial-z { position: absolute; top: 53px; font: 400 11px/1.4 var(--f-mono); letter-spacing: .12em; color: var(--brass); white-space: nowrap; }
+.cat__dial-a { left: 0; }
+.cat__dial-z { right: -.12em; } /* 字間の最後の空きを外して、右端を線の端にそろえる */
+
+/* ③ 記録：2 列（各 544px）。絵は各列の中央に、下端そろえ、切らない（2026-11-19：前は左そろえ。オーナー「写真は中央揃えでいいよ」）
+   記録の画面は高さ 360px。ウィジェットの絵（小・中・大。横長 1137×600、地は透明で影も絵の中）は列の幅いっぱい。
+   絵の下の影の余白（34/758）は、下に負のマージンで外す（ウィジェットの下端を、記録の画面の下端にそろえる） */
+.cat__col { grid-column: span 6; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+.cat__col > .cat__head { align-self: stretch; }
+.cat__shot { margin-top: auto; width: auto; height: 360px; max-width: 100%; border-radius: 20px; box-shadow: var(--shadow); }
+.cat__shot--w { width: 100%; height: auto; border-radius: 0; box-shadow: none; margin-bottom: calc(-34 / 758 * 100%); }
+
+/* 結び：中央、短い真鍮の線 → 見出し → 本文。箱なし */
+.cat__end { text-align: center; }
+.cat__end::before { content: ""; display: block; width: 48px; height: 1px; margin: 0 auto 24px; background: var(--brass); }
+.cat__h--end { margin-top: 0; }
+.cat__end .cat__p { margin-top: 12px; font-size: 15px; color: var(--cream); } /* 区間の下の透明へのグラデーションにかかり、空が明るい時に 4.5:1 ぎりぎりだったので（2026-11-19。390 幅で 4.50）、本文より少し濃く */
+
+/* ---------- 8. 料金 ---------- */
+.price { padding: 160px var(--gutter) 80px; }
+.price .h2 { margin-bottom: 56px; }
+.plans { max-width: 920px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
+.plan {
+  position: relative; background: var(--glass); border: 1px solid var(--glass-line); border-radius: 24px; padding: 32px 28px 28px;
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+}
+.no-bf .plan { background: rgba(16, 19, 32, .82); }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .plan { background: rgba(16, 19, 32, .82); } }
+.plan--res { border-color: var(--brass); }
+.plan__tag { color: var(--brass); margin-bottom: 8px; }
+.plan__h { font: 300 26px/1.4 var(--f-display); letter-spacing: .06em; margin-bottom: 20px; }
+.plan__h span { display: block; font: 400 13px/1.6 var(--f-text); letter-spacing: .04em; color: var(--muted-on-dark); margin-top: 2px; }
+.prices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 16px 0; border-top: 1px solid rgba(244, 240, 232, .14); border-bottom: 1px solid rgba(244, 240, 232, .14); }
+.prices div { display: flex; flex-direction: column-reverse; gap: 2px; }
+.prices dt { font-size: 13px; line-height: 1.5; color: var(--muted-on-dark); }
+.prices dd { display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap; }
+.prices b { font: 300 32px/1.2 "Jost", sans-serif; letter-spacing: .01em; }
+.prices dd span { font-size: 13px; color: var(--muted-on-dark); }
+.plan__note { margin: 14px 0 18px; font-size: 13.5px; line-height: 1.75; color: var(--lamp); }
+.dots li { position: relative; padding-left: 20px; font-size: 15px; line-height: 1.7; margin: 7px 0; }
+.dots li::before { content: ""; position: absolute; left: 3px; top: .72em; width: 6px; height: 6px; border-radius: 50%; background: var(--brass); }
+.trust { max-width: 920px; margin: 40px auto 0; border-top: 1px solid rgba(244, 240, 232, .16); }
+.trust li { display: grid; grid-template-columns: minmax(0, 15em) 1fr; gap: 24px; padding: 16px 4px; border-bottom: 1px solid rgba(244, 240, 232, .16); font-size: 15px; line-height: 1.7; }
+.trust b { font-weight: 500; }
+.trust span { color: var(--muted-on-dark); }
+
+/* ---------- 9. よくある質問・お問い合わせ ---------- */
+.faq { padding: 160px var(--gutter) 120px; }
+.faq .h2 { margin-bottom: 40px; }
+.h2--s { font-size: clamp(24px, 2.2vw, 32px); }
+.qa, .contact { max-width: 720px; margin: 0 auto; }
+.qa details { border-top: 1px solid rgba(244, 240, 232, .16); }
+.qa details:last-child { border-bottom: 1px solid rgba(244, 240, 232, .16); }
+.qa summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  min-height: 56px; padding: 14px 4px; font-size: 16px; line-height: 1.6; font-weight: 500;
+}
+.qa summary::-webkit-details-marker { display: none; }
+.qa summary::after { content: "＋"; flex: none; color: var(--brass); font-weight: 400; }
+.qa details[open] summary::after { content: "−"; }
+.qa details p { padding: 0 4px 20px; font-size: 15px; line-height: 1.9; color: rgba(244, 240, 232, .88); }
+.contact { margin-top: 96px; }
+.contact p { font-size: 15px; line-height: 1.9; color: rgba(244, 240, 232, .88); }
+.contact .h2 { margin-bottom: 20px; }
+.mail { display: inline-block; margin-top: 8px; padding: 10px 0; color: var(--lamp); font: 400 15px/1.5 var(--f-mono); letter-spacing: .04em; text-underline-offset: 4px; }
+
+/* ---------- 10. 最後の CTA ---------- */
+.get { min-height: 100svh; padding: calc(56px + 2vh) var(--gutter) 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; }
+.get .cta__note { text-shadow: var(--sky-glow); }
+/* 背の低い横長の画面：塔の先（画面の 37% あたり）より上に収める */
+@media (min-width: 1024px) and (max-height: 860px) {
+  .get { padding-top: calc(56px + 8px); gap: 12px; }
+  .get__icon { width: 64px; height: 64px; }
+  .get .h2 { font-size: clamp(26px, 2.2vw, 34px); }
+  .get .cta { gap: 8px; }
+}
+.get__icon { width: 96px; height: 96px; border-radius: 22%; box-shadow: var(--shadow); }
+.get .cta { align-items: center; }
+.get__h { text-shadow: var(--sky-glow); }
+.get > * { opacity: var(--get-o, 1); } /* 押し上げ（A）の最後：ヘッダーの下に CTA がのぞかないよう、site.js が消す */
+
+/* ---------- フッター ---------- */
+/* 展示の下に添えた小さなクレジット。帯・線・ぼかしは敷かない（箱庭を切らない）。夜の地面（絵の下の暗い所）にそのまま置く。
+   下地：上端で透明 → 40px 下で空の下地と同じ色の 0.8 → 下端まで（文字はこの下から。押し上げが上限に達して台座に重なっても 4.5:1 以上）。
+   A（押し上げ）：モバイル・タブレット・下の B に当てはまらない PC。site.js が、フッターの上端 − 6px が台座の下の角に届いたところから、
+   空の 2 層（.sky__soft・.sky__sharp）を --end-y だけ上へずらす（スクロールと 1:1）。最後は「箱庭 → クレジット」で止まる */
+.ft { position: relative; padding: 40px var(--gutter) 32px; text-align: center; background: linear-gradient(rgba(16, 19, 32, 0), rgba(16, 19, 32, .8) 40px); }
+.ft__links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 8px; margin-bottom: 12px; }
+.ft__links a { font-size: 14px; padding: 12px 10px; text-decoration: none; }
+.ft__links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.ft__note { font-size: 12px; line-height: 1.8; color: var(--muted-on-dark); max-width: 720px; margin: 4px auto 0; }
+.sky__soft, .sky__sharp { transform: translateY(calc(-1 * var(--end-y, 0px))); }
+/* B（1 画面）：横長の PC。フッターは高さ 0 で #get の下端に置き、中身は上へはみ出させて（align-content: end）#get の画面の左下と右下に分ける。
+   ページは #get の 100svh で終わる。押し上げはしない（site.js の ONE と同じ条件）。
+   左：リンク 5 つ（3 列 × 2 段）＋ ©。右：空の注記 ＋ 商標（ブロックは右に寄せ、文は左そろえ）。どちらも下端は画面の下から 32px。
+   ブロックの幅は、箱庭の左端（50vw − 0.1775 × 絵の幅）の 24px 手前まで、最大 420px。DOM の順（リンク → 注記 → © → 商標）は変えない */
+@media (min-width: 1280px) and (min-aspect-ratio: 8/5) and (min-height: 600px) {
+  .ft {
+    --iw: 100vw; --left: max(var(--gutter), calc((100vw - 1600px) / 2 + var(--gutter)));
+    --fw: min(420px, calc(50vw - 0.1775 * var(--iw) - var(--left) - 24px));
+    height: 0; margin-top: -32px; padding: 0 var(--left); background: none;
+    display: grid; grid-template-columns: var(--fw) minmax(0, 1fr) var(--fw); grid-template-rows: auto auto; align-content: end; text-align: left;
+  }
+  .ft > * { margin: 0; max-width: none; align-self: end; }
+  .ft__links { grid-column: 1; grid-row: 1 / 3; display: grid; grid-template-columns: repeat(3, max-content); gap: 4px 24px; justify-content: start; margin-bottom: calc(12px * 1.8 + 8px); }
+  .ft__links a { display: flex; align-items: center; height: 36px; padding: 0; line-height: 1; }
+  .ft__note { grid-column: 3; grid-row: 1; margin-bottom: 6px; }
+  .ft__note:nth-of-type(2) { grid-column: 1; grid-row: 2; margin-bottom: 0; } /* © は左のブロックの下 */
+  .ft__tm { grid-column: 3; grid-row: 2; margin-bottom: 0; }
+}
+@media (min-width: 1280px) and (min-aspect-ratio: 2/1) and (min-height: 600px) { .ft { --iw: 160vh; } }
+
+/* ---------- 追従のダウンロードバー（モバイルだけ） ---------- */
+.bar { display: none; }
+
+/* =====================================================================
+   モバイル（1023px 以下）
+   ===================================================================== */
+@media (max-width: 1023px) {
+  .hd { gap: 12px; }
+  .hd__link, .hd__cta { display: none; }
+  .hd__clock { position: static; transform: none; margin-left: auto; font-size: 11px; }
+  .hd__city { display: none; }
+  .hd__nav { margin-left: 4px; }
+  .hd__lang { padding: 12px 0 12px 8px; }
+
+  .label, .plan__tag { font-size: 11px; }
+  .h2 { font-size: 24px; }
+
+  /* ヒーロー：文字を 2 つに分ける。「言葉」（見出し・紹介文）は箱庭の塔の先の 40px 上まで下げ、「行動」（ボタン・注記・配信日）は箱庭の下へ。
+     上から、空 → 言葉 → 箱庭 → ボタン。--tip（塔の先）と --base（台座の下の角）は空の絵の置き方から出す（site.css の .sky__layer img と同じ）。
+     ここは横長の絵（タブレット・横向き。16:10 を cover、上下 45%）の値。縦長の絵の値は下の @media */
+  .hero {
+    --iw: max(100vw, 160lvh); --ih: calc(var(--iw) / 1.6); --oy: calc((100lvh - var(--ih)) * 0.45);
+    --tip: calc(var(--oy) + 0.40 * var(--ih)); --base: calc(var(--oy) + 0.828 * var(--ih));
+    display: block; min-height: 100svh; padding: 0;
+  }
+  /* 言葉の列：上から塔の先 − 40px までの箱の、下に寄せる（中身が箱より高い画面では、ヘッダーの下から始まって下へ伸びる） */
+  .hero__col, :lang(en) .hero__col {
+    width: min(100% - 2 * var(--gutter), 560px); min-height: calc(var(--tip) - 40px); margin: 0 auto; padding-top: 72px;
+    justify-content: flex-end; align-items: center; text-align: center; gap: 10px;
+  }
+  .step, .step--rev, .grow, .plans, .trust { max-width: 600px; margin-left: auto; margin-right: auto; }
+  .grow__note { margin-left: max(0px, (100% - 600px) / 2); } /* Step 4 の解説は .step の外にあるので、同じ 600px の列の左端にそろえる */
+  .rain__body { max-width: calc(600px + 2 * var(--gutter)); }
+  /* 箱庭の塔の先（画面の 39% あたり）にかからないよう、文字は上 40% に収める：リードは短い版、注記と日付は詰めて 2 行に */
+  .hero__lead--full { display: none; }
+  .hero__lead--short { display: block; }
+  .hero__col > .label, .hero .date, .hero__plate { display: none; }
+  .hero__h1, :lang(en) .hero__h1 { position: static; transform: none; writing-mode: horizontal-tb; font-size: 30px; line-height: 1.4; letter-spacing: .08em; }
+  :lang(en) .hero__h1 { letter-spacing: .01em; line-height: 1.2; max-width: 13em; }
+  .hero__h1 span + span { margin-top: 0; }
+  .hero__lead { font-size: 15px; line-height: 1.8; max-width: 30em; }
+  /* 行動（背の高い形）：ボタンの上端 = 台座の下の角 + 28px。ボタン → 注記（8px 下）→ 配信日（2px 下） */
+  .hero .cta { position: absolute; left: var(--gutter); right: var(--gutter); top: calc(var(--base) + 28px); margin: 0; align-items: center; gap: 0; text-align: center; }
+  .hero .cta__note { margin-top: 8px; font-size: 12px; text-shadow: 0 1px 10px rgba(16, 19, 32, .5); }
+  .date__line { display: block; margin-top: 2px; font: 400 11px/1.5 var(--f-mono); letter-spacing: .1em; color: var(--lamp); text-shadow: 0 1px 10px rgba(16, 19, 32, .5); }
+  :lang(ja) .date__line { font-family: var(--f-text); font-size: 13px; letter-spacing: .06em; }
+  .hero__down { display: flex; position: absolute; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom)); transform: translateX(-50%); width: 44px; height: 44px; align-items: center; justify-content: center; color: var(--cream); text-decoration: none; font: 300 20px/1 "Jost", sans-serif; opacity: .8; }
+
+  /* 手順：縦に積む（どの Step も、解説 → スマホ画面） */
+  .how { padding: 96px var(--gutter) 48px; }
+  .how__h2 { margin-bottom: 64px; }
+  .step-sec { padding: 56px var(--gutter); }
+  .step, .step--rev { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .step .note { order: -1; }
+  .step--rev .phone { order: 0; }
+  .step--rev .note { justify-self: start; }
+  .phone { width: min(58vw, 236px); margin: 0 auto; padding: 5px; }
+  .note { max-width: 30em; }
+  .note__h { max-width: none; }
+  .note__label { font-size: 11px; padding-bottom: 10px; }
+  .note__h { margin-top: 16px; font-size: 22px; line-height: 1.5; }
+  :lang(en) .note__h { font-size: 24px; line-height: 1.25; }
+  .note__p { margin-top: 10px; font-size: 15px; line-height: 1.9; }
+  :lang(en) .note__p { font-size: 16px; line-height: 1.7; }
+
+  /* Step 3：まず窓（見出しだけ）、次にベールに戻って解説 → スマホ（ベールで暗い影があるので、もやは出す） */
+  .rain__window { display: block; height: 80svh; padding: 2svh var(--gutter) 0; }
+  .rain__mh { font-weight: 300; font-size: 24px; line-height: 1.5; letter-spacing: .06em; text-align: center; color: var(--on-sky); text-shadow: var(--sky-glow); transition: color .4s; }
+  :lang(en) .rain__mh { letter-spacing: .01em; max-width: 14em; margin: 0 auto; }
+  .rain__body { min-height: 0; padding: 48px var(--gutter); grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .rain__note, .rain__phone { grid-column: auto; }
+  .rain__phone { width: min(58vw, 236px); }
+  .rain__h { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .rain__note .note__p { margin-top: 14px; } /* 見出しを隠すぶん、罫線と本文の間を少し広く */
+
+  /* Step 4（縮退の形）：解説の下に 2×2 */
+  .grow-sec { display: block; max-width: none; padding: 56px var(--gutter); }
+  .grow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; margin-top: 28px; }
+
+  /* 見せ場：横書きで上部 */
+  .dusk__copy, :lang(en) .dusk__copy { left: var(--gutter); right: var(--gutter); top: calc(56px + 4svh); bottom: auto; transform: none; width: auto; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+  .dusk__label, .dusk__h { writing-mode: horizontal-tb; }
+  .dusk__h, :lang(en) .dusk__h { font-size: 24px; line-height: 1.5; letter-spacing: .06em; }
+  :lang(en) .dusk__h { letter-spacing: .01em; line-height: 1.3; }
+  .dusk__h span + span { margin-top: 0; }
+
+  /* 目録：1 列（組と組の間 72px）。本文は幅いっぱい */
+  .feat { padding: 96px var(--gutter) 48px; }
+  .feat__h2 { margin-bottom: 40px; }
+  .cat { max-width: 600px; gap: 72px; }
+  .cat__group { display: block; }
+  .cat__h { margin-top: 16px; font-size: 22px; }
+  :lang(en) .cat__h { font-size: 24px; line-height: 1.25; }
+  .cat__p { margin-top: 10px; font-size: 15px; line-height: 1.85; }
+  :lang(en) .cat__p { font-size: 16px; line-height: 1.7; }
+  .cat__aside { margin-top: 24px; }
+  /* 7 都市は、指で横に送る棚（1 つ 148px。390 幅で 3 つ目が 42px 見える）。横に動くのは ul の中だけ（ul の幅は列の幅 ＋ 左右の余白） */
+  .cities {
+    display: flex; align-items: flex-end; gap: 12px; margin: 28px calc(-1 * var(--gutter)) 0; padding: 0 var(--gutter);
+    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-left: var(--gutter); scrollbar-width: none;
+  }
+  .cities::-webkit-scrollbar { display: none; }
+  .cities li { flex: 0 0 148px; scroll-snap-align: start; }
+  .cat__aside--xmas { gap: 16px; }
+  .cat__xmas { width: 112px; border-radius: 10px; }
+  .sounds { margin-top: 20px; justify-content: space-between; gap: 13px; }
+  .sounds li { flex: 1 1 0; width: auto; min-width: 0; }
+  .sounds img { border-radius: 12px; }
+  .cat__col { gap: 20px; }
+  .cat__col + .cat__col { margin-top: 48px; }
+  .cat__label--blank { height: 0; padding: 0; }
+  .cat__shot { margin-top: 0; width: 248px; height: auto; border-radius: 16px; }
+  .cat__shot--w { width: 100%; border-radius: 0; margin-bottom: calc(-34 / 758 * 100%); }
+  .cat__h--end { font-size: 22px; }
+
+  .price { padding: 96px var(--gutter) 48px; }
+  .price .h2 { margin-bottom: 40px; }
+  .plans { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .plan { padding: 28px 20px 22px; border-radius: 20px; }
+  .prices b { font-size: 28px; }
+  .trust li { grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 14px 4px; }
+
+  .faq { padding: 96px var(--gutter) 72px; }
+  .contact { margin-top: 64px; }
+
+  .get { padding-top: calc(56px + 8px); gap: 12px; }
+  .get__icon { width: 64px; height: 64px; }
+  .get .cta { gap: 8px; }
+  .get__h { font-size: 24px; }
+
+  .ft { padding-bottom: calc(24px + env(safe-area-inset-bottom)); } /* 追従バーはフッターが見えている間は出ないので、よける余白は要らない */
+
+  .bar {
+    display: flex; align-items: center; gap: 12px;
+    position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 30;
+    height: 56px; padding: 0 8px 0 10px; border-radius: 999px;
+    background: var(--cream); color: var(--ink); box-shadow: 0 12px 40px rgba(8, 10, 20, .35);
+    transform: translateY(calc(100% + 40px)); transition: transform .35s ease;
+  }
+  .bar.is-on { transform: none; }
+  .bar__icon { width: 36px; height: 36px; border-radius: 22%; }
+  .bar__text { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+  .bar__text b { font: 400 15px/1.3 "Jost", sans-serif; letter-spacing: .12em; }
+  .bar__text span { font-size: 12px; color: var(--muted-on-cream); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar__btn { display: inline-flex; align-items: center; height: 40px; padding: 0 20px; border-radius: 999px; background: var(--ink); color: var(--cream); text-decoration: none; font-size: 14px; font-weight: 500; }
+}
+/* ヒーロー（縦長の絵：幅 ÷ 高さ が 2/3 以下）。絵（720×1560）は上にそろえて敷く。塔の先は絵の高さの 0.417、台座の下の角は 0.733 */
+@media (max-width: 1023px) and (max-aspect-ratio: 2/3) {
+  .hero { --ih: max(100lvh, 216.67vw); --tip: calc(0.417 * var(--ih)); --base: calc(0.733 * var(--ih)); }
+}
+/* とても横長（横向きのスマホ）：絵は高さで合わせる */
+@media (max-width: 1023px) and (min-aspect-ratio: 2/1) {
+  .hero { --iw: 160lvh; --oy: 0px; }
+}
+/* ヒーローの背の低い形（幅 ÷ 高さ が 0.48 以上。375×667、本物の iPhone の Safari（390 幅で見える高さ 660 前後）、タブレット）：
+   箱庭の下に 3 行が入らないので、言葉は 見出し → 紹介文 → 配信日（ランプ色の 1 行）、配信日の下端 = 塔の先 − 40px。
+   行動はボタンだけを、ヒーローの下端から 12px（＋ safe-area）に。注記と ↓ は出さない（注記の中身は #get と料金にある） */
+@media (max-width: 1023px) and (min-aspect-ratio: 12/25) {
+  .hero .cta { position: static; display: block; }
+  .hero .cta__note, .hero__down { display: none; }
+  .hero .date__line { margin-top: 0; }
+  .hero .store { position: absolute; left: 0; right: 0; bottom: calc(12px + env(safe-area-inset-bottom)); width: max-content; margin: 0 auto; }
+}
+/* 短い画面のヒーロー：リードを短い版に */
+@media (max-width: 1023px) and (max-height: 760px) {
+  .hero__h1, :lang(en) .hero__h1 { font-size: 27px; }
+}
+
+/* ---------- Step 4 のピン留め：1 台の箱庭が、スクロールで下から建ち上がる ----------
+   条件：JS あり、動きを減らす設定でない、高さ 520px 以上（site.js の GROW_Q と同じ）。外れたら上の「標本の並び」のまま。
+   4 枚の絵は同じ幅で下端をそろえると台座が完全に重なる（左右の端も、台座の角の高さも同じ）。上端・中央そろえは使わない */
+@media (prefers-reduced-motion: no-preference) and (min-height: 520px) {
+  .js .grow-sec { display: grid; grid-template-columns: minmax(0, 1fr); max-width: none; padding: 0; gap: 0; }
+  .js .grow__note, .js .grow__track { grid-area: 1 / 1; }
+  .js .grow__track { height: 320vh; }
+  .js .grow__pin { position: sticky; top: 0; height: 100svh; }
+  /* 舞台：いちばん背の高い b420 の比。空のぼけた街の影がほぼ真下に来て、模型の落とす影に見える */
+  .js .grow { position: absolute; display: block; left: 52%; bottom: 22svh; transform: translateX(-50%); width: min(34vw, 56svh, 520px); max-width: none; margin: 0; aspect-ratio: 520 / 417; opacity: var(--go, 1); }
+  /* 影は動かない 1 枚（絵ごとの drop-shadow は、重なる間に二重に濃くなる） */
+  .js .grow::before { inset: auto 8% -4%; height: 30%; border-radius: 0; background: radial-gradient(closest-side, rgba(8, 10, 20, .38), transparent); filter: blur(12px); }
+  /* 各段は舞台いっぱいの箱で、絵はその下端に置く（建ち上がりのマスクの % が、4 枚とも舞台の高さに対する値になる） */
+  .js .grow li { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+  /* 消えている段も visibility: hidden にはしない（読み上げから外れ、VoiceOver が 4 枚の絵と時間を読めなくなる） */
+  .js .grow li + li {
+    opacity: 0;
+    -webkit-mask-image: linear-gradient(to top, #000 calc(var(--r, .34) * 110% - 10%), transparent calc(var(--r, .34) * 110%));
+    mask-image: linear-gradient(to top, #000 calc(var(--r, .34) * 110% - 10%), transparent calc(var(--r, .34) * 110%));
+  }
+  /* 時間のラベルは、読み上げだけに残す（見た目は目盛りの文字） */
+  .js .grow__cap { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip-path: inset(50%); }
+
+  /* 目盛りとカウンター（PC は右の縦の目盛り） */
+  .js .grow__meter { display: block; position: absolute; right: clamp(32px, 5vw, 80px); top: 50%; transform: translateY(-50%); width: 150px; opacity: var(--go, 1); color: var(--ink); }
+  .grow__time { white-space: nowrap; line-height: 1; color: var(--ink); }
+  .grow__time b { display: inline-block; min-width: 1.25em; text-align: right; font: 200 64px/1 "Jost", sans-serif; }
+  .grow__time b:first-child { min-width: .65em; } /* 時間の桁（数字の幅が変わってがたつかないよう、幅を決めておく） */
+  .grow__time i { font: 400 12px/1 var(--f-mono); font-style: normal; letter-spacing: .1em; margin: 0 10px 0 4px; }
+  :lang(ja) .grow__time i { font-family: var(--f-text); font-size: 13px; }
+  .grow__scale {
+    position: relative; height: min(44svh, 400px); margin-top: 24px;
+    /* 左端の線と、30 分ごとの小さい刻み（14 等分） */
+    background: linear-gradient(rgba(20, 24, 42, .35), rgba(20, 24, 42, .35)) 0 0 / 1px 100% no-repeat,
+      repeating-linear-gradient(to top, rgba(20, 24, 42, .35) 0 1px, transparent 1px calc(100% / 14)) 0 0 / 6px 100% no-repeat;
+  }
+  /* 進みの線（真鍮）と、その先端の鋲。真鍮は線だけ（文字にすると、夕焼けの橙の上で 4.5:1 に届かない） */
+  .grow__scale::before { content: ""; position: absolute; left: -.5px; bottom: 0; width: 2px; height: 100%; background: var(--brass-d); transform: scaleY(var(--gm, .0595)); transform-origin: bottom; }
+  .grow__scale::after { content: ""; position: absolute; left: -2px; bottom: calc(var(--gm, .0595) * 100% - 2.5px); width: 5px; height: 5px; background: var(--brass-d); transform: rotate(45deg); }
+  /* 大きい刻み 4 本（25 分・2 時間・4 時間・7 時間）。--at は 420 分に対する位置。
+     まだの刻みの文字は ink の 80%（設計書の 62% では、夕焼けの橙の上で 3.4〜3.6:1。80% で 4.5:1 以上） */
+  .grow__scale li { position: absolute; left: 0; bottom: calc(var(--at) * 100%); transform: translateY(50%); padding-left: 24px; white-space: nowrap; font: 400 11px/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(20, 24, 42, .8); transition: color .3s; }
+  .grow__scale li::before { content: ""; position: absolute; left: 0; top: 50%; width: 14px; height: 1px; margin-top: -.5px; background: var(--ink); }
+  .grow__scale li.is-on { color: var(--ink); }
+  .grow__scale li:last-child.is-on { font-weight: 500; }
+}
+/* PC：解説は左にピン留め。舞台と重ねて、同じ 1 画面に */
+@media (prefers-reduced-motion: no-preference) and (min-height: 520px) and (min-width: 1024px) {
+  .js .grow-sec .grow__note {
+    position: sticky; top: 0; height: 100svh; align-self: start; z-index: 1;
+    /* 本文 540px。どの幅でも左上（模型の上の空）に置く：模型のいちばん高い所（塔・クレーン）より上で本文が終わる。
+       縦の中央だと、540px の本文が模型の左の建物にかかる */
+    width: min(540px, 100% - 2 * clamp(32px, 5vw, 80px)); margin-left: clamp(32px, 5vw, 80px);
+    /* もやは中身の高さだけに敷きたいので、flex ではなく grid にして、もや（::before・::after）を中身の 3 行に重ねる */
+    display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; padding-top: calc(56px + 10vh);
+    opacity: var(--go, 1);
+  }
+  .js .grow__note > .note__label { grid-area: 1 / 1; }
+  .js .grow__note > .note__h { grid-area: 2 / 1; }
+  .js .grow__note > .note__p { grid-area: 3 / 1; }
+  .js .grow__note::before { position: relative; inset: auto; grid-area: 1 / 1 / 4 / 2; margin: -100px -140px; }
+}
+/* 背の低い PC の画面（〜700px）：模型が上へ来て塔の先が本文の高さに入るので、本文は模型の左の端まで（舞台の左 = 52vw − 舞台の幅の半分） */
+@media (prefers-reduced-motion: no-preference) and (min-height: 520px) and (max-height: 700px) and (min-width: 1024px) {
+  .js .grow-sec .grow__note { width: min(540px, 52vw - min(17vw, 28svh, 260px) - clamp(32px, 5vw, 80px) - 24px); }
+}
+/* スマホ：解説はピン留めの前にふつうに流れ、ピン留めの中は目盛りと模型だけ（見出しと本文を入れると、iPhone SE の高さに収まらない） */
+@media (prefers-reduced-motion: no-preference) and (min-height: 520px) and (max-width: 1023px) {
+  .js .grow-sec { display: block; padding: 56px var(--gutter) 0; }
+  .js .grow__track { height: 300svh; margin: 28px calc(-1 * var(--gutter)) 0; }
+  .js .grow { left: 50%; bottom: calc(96px + env(safe-area-inset-bottom)); width: min(84vw, 52svh, 460px); } /* 追従バーの上 */
+  /* 目盛りは横に。タブレットや狭い窓でも、ほかの手順と同じ 600px の列の中央に */
+  .js .grow__meter { left: 50%; right: auto; top: calc(56px + 4svh); transform: translateX(-50%); width: min(100% - 2 * var(--gutter), 600px); text-align: center; }
+  .grow__time b { font-size: 48px; }
+  .grow__scale {
+    height: 10px; margin-top: 16px;
+    background: linear-gradient(rgba(20, 24, 42, .35), rgba(20, 24, 42, .35)) 0 0 / 100% 1px no-repeat,
+      repeating-linear-gradient(to right, rgba(20, 24, 42, .35) 0 1px, transparent 1px calc(100% / 14)) 0 0 / 100% 5px no-repeat;
+  }
+  .grow__scale::before { left: 0; top: -.5px; bottom: auto; width: 100%; height: 2px; transform: scaleX(var(--gm, .0595)); transform-origin: left; }
+  .grow__scale::after { left: calc(var(--gm, .0595) * 100% - 2.5px); top: -2px; bottom: auto; }
+  .grow__scale li { left: calc(var(--at) * 100%); top: 0; bottom: auto; transform: none; padding: 18px 0 0; }
+  .grow__scale li::before { left: 0; top: 0; width: 1px; height: 10px; margin: 0; }
+  /* 文字は刻みの下。1 本目は左そろえ、2・3 本目は刻みの中央、4 本目は右そろえ（350px 幅で重ならない） */
+  .grow__scale li:nth-child(2), .grow__scale li:nth-child(3) { transform: translateX(-50%); }
+  .grow__scale li:nth-child(2)::before, .grow__scale li:nth-child(3)::before { left: 50%; }
+  .grow__scale li:last-child { transform: translateX(-100%); }
+  .grow__scale li:last-child::before { left: auto; right: 0; }
+}
+
+/* ---------- 動きを減らす ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .dusk { height: auto; }
+  .dusk__pin { position: relative; }
+  .dusk__copy { opacity: 1 !important; }
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+  .js .note.reveal::before, .js :is(.note, .cat__head).reveal :is(.note__label, .cat__label, .note__h, .note__p, .cat__h, .cat__p) { opacity: 1; transform: none; transition: none; }
+  .js :is(.note, .cat__head).reveal :is(.note__label, .cat__label)::after { transform: none; transition: none; }
+  .bar, .hd, .hd__cta, .store { transition: none; }
+  .sky__layer, .sky__sharp { transition: opacity .6s ease; }
+}

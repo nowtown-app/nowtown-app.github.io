@@ -1,221 +1,356 @@
 <!doctype html>
-<html lang="ja">
+<html lang="ja" data-tone="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nowtown：箱庭の街で集中｜集中タイマーアプリ</title>
-<meta name="description" content="Nowtown は iPhone の集中タイマーアプリ。集中した時間だけ、箱庭の街が建っていきます。2026年12月1日 配信。App Store で予約受付中。">
-<meta property="og:title" content="Nowtown：箱庭の街で集中">
-<meta property="og:description" content="集中した時間だけ、箱庭の街が建っていく集中タイマーアプリ。2026年12月1日 配信。App Store で予約受付中。">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+// 旧リンク（index.html#english など）は英語のページへ
+(function(h){var m={'#english':'','#faq-en':'#faq','#contact-en':'#contact'};if(h in m)location.replace('en/'+m[h]);})(location.hash);
+document.documentElement.classList.add('js');
+</script>
+<title>Nowtown：箱庭の街で集中｜街が建つ集中タイマー（iPhone）</title>
+<meta name="description" content="Nowtown は iPhone の集中タイマーアプリ。集中した時間だけ、箱庭の街が建っていきます。世界の 7 都市に、現地の天気と時刻。2026年12月1日 配信、App Store で予約受付中。">
+<link rel="canonical" href="https://kaitoiwaki.github.io/nowtown-site/">
+<link rel="alternate" hreflang="ja" href="https://kaitoiwaki.github.io/nowtown-site/">
+<link rel="alternate" hreflang="en" href="https://kaitoiwaki.github.io/nowtown-site/en/">
+<link rel="alternate" hreflang="x-default" href="https://kaitoiwaki.github.io/nowtown-site/">
+<meta name="theme-color" content="#101320">
+<meta name="apple-itunes-app" content="app-id=6824274766">
 <meta property="og:type" content="website">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="style.css">
+<meta property="og:url" content="https://kaitoiwaki.github.io/nowtown-site/">
+<meta property="og:title" content="Nowtown：箱庭の街で集中">
+<meta property="og:description" content="集中した時間が、街になる。集中した時間だけ、箱庭の街が建っていく集中タイマー。2026年12月1日 配信、App Store で予約受付中。">
+<meta property="og:image" content="https://kaitoiwaki.github.io/nowtown-site/og-ja.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.png">
 <link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preload" href="assets/fonts/jost-300.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/nt-display-jp-300.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+// 最初の空（S0）のくっきりした絵を先に読む。Save-Data のときは読まない（ぼかした絵だけ）
+(function(d,p){if(navigator.connection&&navigator.connection.saveData)return;[['(min-aspect-ratio: 2/3)','land',1600,2560],['(max-aspect-ratio: 2/3)','port',720,1080]].forEach(function(v){var l=d.createElement('link');l.rel='preload';l.as='image';l.type='image/avif';l.media=v[0];l.setAttribute('imagesizes','100vw');l.setAttribute('fetchpriority','high');l.setAttribute('imagesrcset',p+'s0-'+v[1]+'-sharp-'+v[2]+'.avif '+v[2]+'w, '+p+'s0-'+v[1]+'-sharp-'+v[3]+'.avif '+v[3]+'w');d.head.appendChild(l);});})(document,'assets/sky/');
+</script>
+<link rel="stylesheet" href="assets/site.css?v=271fb46b">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Nowtown：箱庭の街で集中","operatingSystem":"iOS 18","applicationCategory":"ProductivityApplication","description":"集中した時間だけ、箱庭の街が建っていく iPhone の集中タイマー。","url":"https://kaitoiwaki.github.io/nowtown-site/","installUrl":"https://apps.apple.com/jp/app/id6824274766","datePublished":"2026-12-01","inLanguage":"ja","offers":{"@type":"Offer","price":0,"priceCurrency":"JPY"}}
+</script>
+<script src="assets/site.js?v=91e20471" defer></script>
 </head>
 <body>
-<div class="hero night"><div class="hero-inner">
-  <div class="top"><a class="brand" href="./">Nowtown</a><nav><a href="./" aria-current="page">アプリ / App</a><a href="#faq">サポート / Support</a><a href="privacy.html">プライバシー / Privacy</a><a href="terms.html">利用規約 / Terms</a></nav></div>
-  <div class="intro">
-    <div class="intro-text">
-      <p class="eyebrow">iPhone の集中タイマーアプリ</p>
-      <h1>集中した時間だけ、<wbr>箱庭の街が<wbr>建っていく。</h1>
-      <p class="lead"><strong>Nowtown：箱庭の街で集中</strong> は、勉強や仕事の時間をはかる集中タイマーです。タイマーを始めると街の工事が始まり、集中した分だけ建物が建ちます。</p>
-      <p class="release"><span class="dot"></span>2026年12月1日 配信。App Store で予約受付中</p>
-      <p class="cta-row"><a class="cta" href="https://apps.apple.com/jp/app/id6824274766">App Store で予約する</a></p>
-      <p class="hero-en" lang="en">A focus timer for iPhone that builds a tiny city while you focus. Coming December 1, 2026. <a href="https://apps.apple.com/app/id6824274766">Pre-order on the App Store</a></p>
-      <p class="jump"><a href="#faq">よくある質問</a><a href="#contact">お問い合わせ</a><a href="#english">English</a></p>
-    </div>
-    <div class="shot intro-shot"><img src="shots/ja-1.webp" width="660" height="1434" alt="夜の東京の箱庭と、残り 24 分 45 秒の集中タイマーの画面"></div>
+<a class="skip" href="#main">本文へ</a>
+
+<!-- 空（ページ全体の背景。スクロールに合わせて、夜明け前から夜へ） -->
+<div class="sky" aria-hidden="true">
+  <div class="sky__soft">
+    <div class="sky__layer" data-i="0"><picture><source media="(max-aspect-ratio: 2/3)" srcset="assets/sky/s0-port-soft.webp"><img src="assets/sky/s0-land-soft.webp" alt="" decoding="async" fetchpriority="high"></picture></div>
+    <div class="sky__layer" data-i="1"><picture><source media="(max-aspect-ratio: 2/3)" srcset="assets/sky/s1-port-soft.webp"><img src="assets/sky/s1-land-soft.webp" alt="" decoding="async"></picture></div>
+    <div class="sky__layer" data-i="2"><picture><source media="(max-aspect-ratio: 2/3)" srcset="assets/sky/s2-port-soft.webp"><img src="assets/sky/s2-land-soft.webp" alt="" decoding="async"></picture></div>
+    <div class="sky__layer" data-i="3"><picture><source media="(max-aspect-ratio: 2/3)" srcset="assets/sky/s3-port-soft.webp"><img src="assets/sky/s3-land-soft.webp" alt="" decoding="async"></picture></div>
+    <div class="sky__layer" data-i="4"><picture><source media="(max-aspect-ratio: 2/3)" srcset="assets/sky/s4-port-soft.webp"><img src="assets/sky/s4-land-soft.webp" alt="" decoding="async"></picture></div>
+    <div class="sky__layer" data-i="5"><picture><source media="(max-aspect-ratio: 2/3)" srcset="assets/sky/s5-port-soft.webp"><img src="assets/sky/s5-land-soft.webp" alt="" decoding="async"></picture></div>
+    <div class="sky__layer" data-i="6"><picture><source media="(max-aspect-ratio: 2/3)" srcset="assets/sky/s6-port-soft.webp"><img src="assets/sky/s6-land-soft.webp" alt="" decoding="async"></picture></div>
   </div>
-</div></div>
-<main>
-  <p class="updated">本物の天気と時間の街で、集中。　<a class="lang-switch" href="#english">English is below.</a></p>
+  <div class="sky__sharp">
+    <div class="sky__layer" data-i="0" data-s="0"></div>
+    <div class="sky__layer" data-i="1" data-s="1"></div>
+    <div class="sky__layer" data-i="2"></div>
+    <div class="sky__layer" data-i="3" data-s="3"></div>
+    <div class="sky__layer" data-i="4" data-s="4"></div>
+    <div class="sky__layer" data-i="5" data-s="5"></div>
+    <div class="sky__layer" data-i="6" data-s="6"></div>
+  </div>
+  <div class="sky__scrim"></div>
+</div>
 
-  <section class="lang" lang="ja">
-    <div class="feature">
-      <div>
-        <h2>しくみ</h2>
-        <ol class="steps">
-          <li><strong>時間を決めて、はじめる</strong><span>集中する時間（5〜120 分）を決めて、タイマーを始めます。</span></li>
-          <li><strong>集中しているあいだ、工事が進む</strong><span>集中した時間だけ、ビルやランドマークが建っていきます。途中でやめても、建った分はなくなりません。</span></li>
-          <li><strong>毎日つづけると、街が完成</strong><span>1 日に 25 分を 1 回なら、約 17 日で東京が完成します。</span></li>
+<header class="hd">
+  <a class="hd__brand" href="./">Nowtown</a>
+  <p class="hd__clock" aria-hidden="true"><span class="hd__city">TOKYO </span><b data-clock>05:40</b> · <span data-wx>快晴</span></p>
+  <nav class="hd__nav" aria-label="ページ内">
+    <a class="hd__link" href="#how">しくみ</a>
+    <a class="hd__link" href="#price">料金</a>
+    <a class="hd__link" href="#faq">サポート</a>
+    <a class="hd__lang" href="en/" hreflang="en" lang="en">EN</a>
+    <a class="hd__cta" href="https://apps.apple.com/jp/app/id6824274766"><span data-pre>予約する</span><span data-post hidden>入手</span></a>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- 1. ヒーロー（S0 夜明け前・窓） -->
+<section class="hero" id="top" data-stage="0" data-sharp="1">
+  <div class="hero__col">
+    <p class="label">Focus timer for iPhone</p>
+    <h1 class="hero__h1 jpd"><span>集中した<wbr>時間が、</span><span>街になる。</span></h1>
+    <p class="hero__lead hero__lead--full"><span class="nb">Nowtown は、</span><wbr>勉強や<wbr>仕事の<wbr>時間を<wbr>はかる<wbr>集中タイマー。<wbr>タイマーを<wbr>始めると<wbr>工事が<wbr>始まり、<wbr>集中した<wbr>分だけ、<wbr>箱庭の<wbr>街が<wbr>建っていきます。</p>
+    <p class="hero__lead hero__lead--short">勉強や<wbr>仕事の<wbr>時間を<wbr>はかる<wbr>集中タイマー。<br>集中した<wbr>分だけ、<wbr>箱庭の<wbr>街が<wbr>建っていきます。</p>
+    <div class="date">
+      <p class="label date__label">Release 2026</p>
+      <p class="date__day jpd"><span class="date__n">12</span>月<span class="date__n">1</span>日 配信</p>
+      <p class="date__status"><span data-pre>App Store で予約受付中</span><span data-post hidden>App Store で配信中</span></p>
+    </div>
+    <div class="cta" id="hero-cta">
+      <a class="store" href="https://apps.apple.com/jp/app/id6824274766"><span data-pre>App Store で予約する</span><span data-post hidden>App Store で入手する</span><span class="store__arrow" aria-hidden="true">→</span></a>
+      <p class="cta__note">ダウンロード無料・<wbr>広告なし・<wbr>iPhone<wbr><span class="nb">（iOS 18 以降）</span></p>
+      <p class="date__line"><span data-pre><span class="nb">2026年12月1日 配信・</span><wbr>予約受付中</span><span data-post hidden>2026年12月1日から<wbr>配信中</span></p>
+    </div>
+  </div>
+  <p class="plate hero__plate"><span class="plate__no">Nº 01 — TOKYO 東京</span><span class="plate__sub">完成まで、集中 7 時間</span></p>
+  <a class="hero__down" href="#how" aria-label="しくみへ">↓</a>
+</section>
+
+<!-- 2. しくみ：導入＋Step 1（S1 朝焼け・ベール） -->
+<section class="how" id="how" data-stage="1" data-sharp="0">
+  <h2 class="h2 jpd how__h2">決めて、<wbr>集中して、<wbr>街に<wbr>なる。</h2>
+  <div class="step">
+    <figure class="phone"><picture><source type="image/avif" srcset="assets/shots/home-ja-440.avif 440w, assets/shots/home-ja-660.avif 660w" sizes="(min-width: 1024px) 300px, (min-width: 407px) 236px, 58vw"><img src="assets/shots/home-ja-440.webp" srcset="assets/shots/home-ja-440.webp 440w, assets/shots/home-ja-660.webp 660w" sizes="(min-width: 1024px) 300px, (min-width: 407px) 236px, 58vw" width="440" height="956" loading="lazy" decoding="async" alt="朝 6 時 30 分の東京の箱庭。工事が始まったばかりのホーム画面と、「集中する 25:00」のボタン"></picture></figure>
+    <div class="note">
+      <p class="note__label">Step 1 · 06:30</p>
+      <h3 class="note__h jpd">時間を決めて、<wbr>はじめる</h3>
+      <p class="note__p">集中する<wbr>時間を <span class="nb">5〜120 分で</span><wbr>決めて、<wbr>タイマーを<wbr>始めます。<wbr><span class="nb">25 分の</span><wbr>ポモドーロにも、<wbr>そのまま<wbr>使えます。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Step 2（S2 昼・ベール） -->
+<section class="step-sec" data-stage="2" data-sharp="0">
+  <div class="step step--rev">
+    <figure class="phone"><picture><source type="image/avif" srcset="assets/shots/focus-ja-440.avif 440w, assets/shots/focus-ja-660.avif 660w" sizes="(min-width: 1024px) 300px, (min-width: 407px) 236px, 58vw"><img src="assets/shots/focus-ja-440.webp" srcset="assets/shots/focus-ja-440.webp 440w, assets/shots/focus-ja-660.webp 660w" sizes="(min-width: 1024px) 300px, (min-width: 407px) 236px, 58vw" width="440" height="956" loading="lazy" decoding="async" alt="昼 12 時の晴れた東京の箱庭に、クレーンが立っている。残り 24 分台の集中タイマーの画面"></picture></figure>
+    <div class="note">
+      <p class="note__label">Step 2 · 12:00</p>
+      <h3 class="note__h jpd">集中しているあいだ、<wbr>工事が進む</h3>
+      <p class="note__p">集中した<wbr>時間だけ、<wbr>ビルや<wbr>ランドマークが<wbr>建っていきます。<wbr>画面を<wbr>消しても、<wbr>ほかの<wbr>アプリを<wbr>開いても、<wbr>タイマーは<wbr>続きます。<wbr>途中で<wbr>やめても、<wbr>建った<wbr>分は<wbr>なくなりません。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Step 3（S3 午後の小雨・窓） -->
+<section class="rain">
+  <div class="rain__window" data-stage="3" data-sharp="1">
+    <p class="rain__mh jpd" aria-hidden="true">東京が<wbr>雨なら、<br>箱庭にも雨。</p>
+  </div>
+  <div class="rain__track" data-stage="3" data-sharp="1" data-sharp-m="0">
+    <div class="rain__body">
+      <div class="note rain__note">
+        <p class="note__label">Step 3 · 14:30 · 小雨</p>
+        <h3 class="note__h jpd rain__h">東京が雨なら、<wbr>箱庭にも雨。</h3>
+        <p class="note__p">箱庭には、<wbr>その<wbr>都市の<wbr>いまの<wbr>天気と<wbr>現地の<wbr>時刻が<wbr>映ります。<wbr>ロンドンが<wbr>雪なら、<wbr>ロンドンの<wbr>箱庭にも<wbr>雪が<wbr>降ります。</p>
+      </div>
+      <figure class="phone rain__phone"><picture><source type="image/avif" srcset="assets/shots/rain-ja-440.avif 440w, assets/shots/rain-ja-660.avif 660w" sizes="(min-width: 1024px) 260px, (min-width: 407px) 236px, 58vw"><img src="assets/shots/rain-ja-440.webp" srcset="assets/shots/rain-ja-440.webp 440w, assets/shots/rain-ja-660.webp 660w" sizes="(min-width: 1024px) 260px, (min-width: 407px) 236px, 58vw" width="440" height="956" loading="lazy" decoding="async" alt="小雨の東京の箱庭。アプリのホーム画面に、都市名 TOKYO と、小雨・17 度の表示"></picture></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Step 4（S4 夕焼け・ベール。ピン留めした 1 台の箱庭が、スクロールで建っていく） -->
+<section class="grow-sec" id="grow" data-stage="4" data-sharp="0">
+  <div class="note grow__note">
+    <p class="note__label">Step 4 · 16:40</p>
+    <h3 class="note__h jpd"><span class="nb">7 時間の集中で、</span><wbr>街が完成</h3>
+    <p class="note__p"><span class="nb">1 日に</span> <span class="nb">25 分を</span> <span class="nb">1 回なら、</span><wbr><span class="nb">約 17 日で</span><wbr>東京が<wbr>完成します。<wbr>集中で<wbr>たまった<wbr>コインで、<wbr>次の<wbr>都市を<wbr>開けられます。</p>
+  </div>
+  <div class="grow__track">
+    <div class="grow__pin">
+      <ol class="grow" aria-label="集中した合計の時間と、東京の育ち方">
+        <li><img src="assets/cut/b25.webp" srcset="assets/cut/b25-260.webp 260w, assets/cut/b25.webp 520w, assets/cut/b25-1040.webp 1040w" sizes="(min-width: 1024px) 490px, 84vw" width="520" height="345" loading="lazy" decoding="async" alt="25 分：工事の囲いと、小さな建物"><span class="grow__cap">25 分</span></li>
+        <li><img src="assets/cut/b120.webp" srcset="assets/cut/b120-260.webp 260w, assets/cut/b120.webp 520w, assets/cut/b120-1040.webp 1040w" sizes="(min-width: 1024px) 490px, 84vw" width="520" height="345" loading="lazy" decoding="async" alt="2 時間：低いビルが建ちはじめた東京"><span class="grow__cap">2 時間</span></li>
+        <li><img src="assets/cut/b240.webp" srcset="assets/cut/b240-260.webp 260w, assets/cut/b240.webp 520w, assets/cut/b240-1040.webp 1040w" sizes="(min-width: 1024px) 490px, 84vw" width="520" height="384" loading="lazy" decoding="async" alt="4 時間：高いビルと塔が建ちはじめた東京"><span class="grow__cap">4 時間</span></li>
+        <li><img src="assets/cut/b420.webp" srcset="assets/cut/b420-260.webp 260w, assets/cut/b420.webp 520w, assets/cut/b420-1040.webp 1040w" sizes="(min-width: 1024px) 490px, 84vw" width="520" height="417" loading="lazy" decoding="async" alt="7 時間：ランドマークまでそろった、完成した東京"><span class="grow__cap">7 時間 完成</span></li>
+      </ol>
+      <div class="grow__meter" aria-hidden="true">
+        <p class="grow__time"><b data-gh>0</b><i>時間</i><b data-gm>25</b><i>分</i></p>
+        <ol class="grow__scale">
+          <li style="--at: .0595">25 分</li>
+          <li style="--at: .2857">2 時間</li>
+          <li style="--at: .5714">4 時間</li>
+          <li style="--at: 1">7 時間 完成</li>
         </ol>
       </div>
-      <div class="shot"><img src="shots/ja-2.webp" width="660" height="1434" alt="東京が建っていく 3 段階。はじめは工事現場だけ、3 時間でビルが建ちはじめ、7 時間で東京タワーまで完成" loading="lazy"></div>
     </div>
+  </div>
+</section>
 
-    <div class="feature">
-      <div>
-        <h2>今の天気と時刻が、街に映る</h2>
-        <p>箱庭には、その都市の今の天気と時刻が映ります。ロンドンに雪が降れば、箱庭にも雪が降ります。</p>
+<!-- 6. 見せ場（S4 → S5・窓・ピン留め） -->
+<section class="dusk" id="dusk" data-stage-from="4" data-stage-to="5" data-sharp="1">
+  <div class="dusk__pin">
+    <div class="dusk__copy">
+      <p class="label dusk__label">Tokyo 16:40 → 17:20</p>
+      <h2 class="dusk__h jpd"><span>日が<wbr>暮れる<wbr>ころ、</span><span>街に<wbr>灯りがともる。</span></h2>
+    </div>
+  </div>
+</section>
+
+<!-- 7. 機能（S5 薄暮・ベール）：展示の目録。街・音・記録の 3 つの組と、結びの 1 行 -->
+<section class="feat" id="features" data-stage="5" data-sharp="0">
+  <h2 class="h2 jpd feat__h2">毎日の<wbr>集中に、<wbr>ちょうど<wbr>いい<wbr>道具。</h2>
+  <div class="cat">
+    <div class="cat__group cat__group--city">
+      <div class="cat__head">
+        <p class="cat__label">01 — Cities</p>
+        <h3 class="cat__h jpd">東京から、<wbr>世界の <span class="nb">7 都市へ</span></h3>
+        <p class="cat__p">東京・<wbr>ニューヨーク・<wbr>ロンドン・<wbr>パリ・<wbr>ドバイ・<wbr>シンガポール・<wbr>シドニー。<wbr>集中で<wbr>ためた<wbr>コインで<wbr>開けます。</p>
       </div>
-      <div class="shot"><img src="shots/ja-3.webp" width="660" height="1434" alt="雪が降る夜のロンドンの箱庭" loading="lazy"></div>
-    </div>
-
-    <div class="feature">
-      <div>
-        <h2>世界の 7 都市</h2>
-        <p class="cities">東京・ニューヨーク・パリ・ロンドン・ドバイ・シンガポール・シドニー</p>
-        <p>集中してためたコインで、次の都市を開けられます（1 都市ずつ購入することもできます）。</p>
+      <ul class="cities" tabindex="0" aria-label="7 つの都市">
+        <li><img src="assets/cut/city-tokyo.webp" width="320" height="247" loading="lazy" decoding="async" alt=""><span>Tokyo</span></li>
+        <li><img src="assets/cut/city-newyork.webp" width="320" height="271" loading="lazy" decoding="async" alt=""><span>New York</span></li>
+        <li><img src="assets/cut/city-london.webp" width="320" height="221" loading="lazy" decoding="async" alt=""><span>London</span></li>
+        <li><img src="assets/cut/city-paris.webp" width="320" height="264" loading="lazy" decoding="async" alt=""><span>Paris</span></li>
+        <li><img src="assets/cut/city-dubai.webp" width="320" height="291" loading="lazy" decoding="async" alt=""><span>Dubai</span></li>
+        <li><img src="assets/cut/city-singapore.webp" width="320" height="237" loading="lazy" decoding="async" alt=""><span>Singapore</span></li>
+        <li><img src="assets/cut/city-sydney.webp" width="320" height="228" loading="lazy" decoding="async" alt=""><span>Sydney</span></li>
+      </ul>
+      <div class="cat__aside cat__aside--xmas">
+        <img class="cat__xmas" src="assets/cut/xmas.webp" width="560" height="449" loading="lazy" decoding="async" alt="12 月の夜の東京の箱庭。センター街のまん中に、灯りのついたクリスマスツリー">
+        <div class="cat__at">
+          <h3 class="cat__ah">季節の行事</h3>
+          <p><span class="nb">12 月の</span><wbr>東京には、<wbr>クリスマスツリー。<wbr>都市ごとに、<wbr>季節の<wbr>景色が<wbr>あります。</p>
+        </div>
       </div>
-      <div class="shot"><img src="shots/ja-6.webp" width="660" height="1434" alt="7 都市の箱庭の一覧" loading="lazy"></div>
     </div>
-
-    <h2>こんなときに</h2>
-    <p class="scenes"><span>勉強に。</span><span>仕事に。</span><span>読書に。</span></p>
-    <p>画面を消しても、ほかのアプリを開いても、タイマーは続きます。</p>
-
-    <h2>アプリの画面</h2>
-    <div class="strip">
-      <div class="shot"><img src="shots/ja-4.webp" width="660" height="1434" alt="雨の音、暖炉の音、好きな音楽を流せる" loading="lazy"></div>
-      <div class="shot"><img src="shots/ja-5.webp" width="660" height="1434" alt="集中の終わりにできる、今日の 1 枚のカード" loading="lazy"></div>
-      <div class="shot"><img src="shots/ja-7.webp" width="660" height="1434" alt="ホーム画面に置いた箱庭のウィジェット" loading="lazy"></div>
-    </div>
-
-    <h2>料金</h2>
-    <p>広告はありません。集中のタイマー・基本の記録・小のウィジェット・ロック画面の残り時間は、無料で使えます。</p>
-    <p>有料のプラン「Nowtown Resident」（月額・年額・買い切り）では、中と大のウィジェット、集中の音（ノイズと重ねがけ）、くわしい記録、置き時計モードなどの特典が使えます。</p>
-    <p class="note">iPhone（iOS 18 以降）</p>
-
-    <div class="cta-block">
-      <p class="release"><span class="dot"></span>2026年12月1日 配信。App Store で予約受付中</p>
-      <p class="cta-row"><a class="cta" href="https://apps.apple.com/jp/app/id6824274766">App Store で予約する</a></p>
-    </div>
-
-    <h2 id="faq">よくある質問</h2>
-
-    <h3>街はどうやって育ちますか？</h3>
-    <p>その街で集中した時間だけ、ビルやランドマークの工事が進みます。どの現場も一斉に工事が始まり、集中を終えたときに完成した建物が姿を見せます。途中でやめても、建った分はなくなりません。</p>
-
-    <h3>天気や時刻は本物ですか？</h3>
-    <p>はい。箱庭の街の、今の天気と時刻を映しています（天気は Apple WeatherKit を使っています）。</p>
-
-    <h3>ほかの都市へ行くには？</h3>
-    <p>集中してためたコインで開けるか、1 都市ずつ購入できます。</p>
-
-    <h3>機種を変えたら、記録や買ったものはどうなりますか？</h3>
-    <p>集中の記録・コイン・開けた都市・工事の進み具合は、あなたの iCloud（Apple ID）にも保存されます。新しい機種で同じ Apple ID の iCloud にサインインしていれば、アプリを入れるとそのまま戻ります。購入したものは、アプリの設定のいちばん下にある「購入を復元」で戻せます。</p>
-
-    <h3>サブスクリプションを解約するには？</h3>
-    <p>端末の「設定」→ 自分の名前 →「サブスクリプション」→ Nowtown から解約できます。期間が終わる 24 時間前までに解約すると、次の更新で請求されません。</p>
-
-    <h3>ウィジェットやロック画面の残り時間が出ません</h3>
-    <p>本アプリは iOS 18 以降で使えます。ロック画面の残り時間（Apple Watch も）と、小のウィジェットは、だれでも使えます。中と大のウィジェットは Nowtown Resident の特典です（住人でないときは、景色と都市名だけを表示します）。ウィジェットは、ホーム画面を長押しして左上の「編集」→「ウィジェットを追加」→ Nowtown から置けます。</p>
-
-    <h3>アプリを閉じても音は続きますか？</h3>
-    <p>集中しているあいだは続きます。右上の音のボタンがオンなら、集中中にアプリを閉じても、街の音と集中の音が集中の終わりまで流れます。集中していないとき（ホーム・休憩・一時停止中）にアプリを閉じると、音は止まります。</p>
-
-    <h3>Nowtown Resident とは？</h3>
-    <p>有料のプランです（月額・年額・買い切り）。中と大のウィジェット、都市のアイコン、くわしい記録、置き時計モード、街の写真と動画、集中の音（ノイズと重ねがけ）が使えます。集中・基本の記録・小のウィジェット・ロック画面の残り時間・閉じても鳴る音は、だれでも無料です。ファミリー共有に対応しています。</p>
-
-    <h3>画面を消しても集中は続きますか？</h3>
-    <p>はい。残り時間は終わる時刻から数えているので、画面を消しても、ほかのアプリを開いても続きます。</p>
-
-    <h2 id="contact">お問い合わせ</h2>
-    <p>不具合やご意見は、こちらへお送りください。使っている端末と iOS のバージョン、どの画面で起きたかを書いていただけると助かります。</p>
-    <p><a href="mailto:voidlabs.work@gmail.com">voidlabs.work@gmail.com</a></p>
-  </section>
-
-  <section class="lang" lang="en" id="english">
-    <div class="feature">
-      <div>
-        <p class="eyebrow">Focus timer for iPhone</p>
-        <h2>A focus timer that builds a tiny city while you focus.</h2>
-        <p class="release"><span class="dot"></span>Coming December 1, 2026. Pre-order now on the App Store</p>
-        <p class="cta-row"><a class="cta" href="https://apps.apple.com/app/id6824274766">Pre-order on the App Store</a></p>
-        <p class="jump"><a href="#faq-en">Support</a><a href="#contact-en">Contact</a></p>
+    <div class="cat__group cat__group--sound">
+      <div class="cat__head">
+        <p class="cat__label">02 — Sound</p>
+        <h3 class="cat__h jpd">街の<wbr>音と、<wbr>集中の<wbr>音</h3>
+        <p class="cat__p">集中中は、<wbr>アプリを<wbr>閉じても<wbr>鳴りつづけます。</p>
       </div>
-      <div class="shot"><img src="shots/en-1.webp" width="660" height="1434" alt="A diorama of Tokyo at night with a focus timer showing 24:41" loading="lazy"></div>
-    </div>
-
-    <div class="feature">
-      <div>
-        <h2>How it works</h2>
-        <ol class="steps">
-          <li><strong>Set a time and start</strong><span>Choose a focus time (5 to 120 minutes) and start the timer.</span></li>
-          <li><strong>The city goes up while you focus</strong><span>Buildings and landmarks are built with the time you focus. If you stop early, what has been built stays.</span></li>
-          <li><strong>Keep going, and the city is complete</strong><span>With one 25-minute session a day, Tokyo is complete in about 17 days.</span></li>
-        </ol>
+      <ul class="sounds">
+        <li><img src="assets/sound/soft-rain.svg" width="464" height="464" loading="lazy" alt=""><span>しずかな雨</span></li>
+        <li><img src="assets/sound/window-rain.svg" width="464" height="464" loading="lazy" alt=""><span>窓の雨</span></li>
+        <li><img src="assets/sound/fireplace.svg" width="464" height="464" loading="lazy" alt=""><span>暖炉</span></li>
+      </ul>
+      <div class="cat__aside cat__aside--pomo">
+        <div class="cat__at">
+          <h3 class="cat__ah">ポモドーロにも</h3>
+          <p><span class="nb">25 分でも、</span><wbr><span class="nb">5〜120 分の</span><wbr>好きな<wbr>長さでも。</p>
+        </div>
+        <div class="cat__dial" aria-hidden="true">
+          <b class="cat__dial-t">25:00</b>
+          <i class="cat__dial-bar"></i>
+          <span class="cat__dial-a">5 分</span><span class="cat__dial-z">120 分</span>
+        </div>
       </div>
-      <div class="shot"><img src="shots/en-2.webp" width="660" height="1434" alt="Tokyo in three stages: just a site at the start, the first towers at 3 hours, Tokyo Tower complete at 7 hours" loading="lazy"></div>
     </div>
-
-    <div class="feature">
-      <div>
-        <h2>Real weather. Real time.</h2>
-        <p>Each city shows its current weather and local time. When it snows in London, it snows in your diorama.</p>
+    <div class="cat__group cat__group--record">
+      <div class="cat__col">
+        <div class="cat__head">
+          <p class="cat__label">03 — Record</p>
+          <h3 class="cat__h jpd">試験までの<wbr>日数と、<wbr>勉強の<wbr>記録</h3>
+          <p class="cat__p">目標の<wbr>日までの<wbr>カウントダウンと、<wbr>週ごとの<wbr>集中時間。</p>
+        </div>
+        <img class="cat__shot" src="assets/shots/stats-ja.webp" width="600" height="632" loading="lazy" decoding="async" alt="記録の画面。試験まであと 46 日、今週の集中時間 8 時間 45 分と、曜日ごとの棒グラフ">
       </div>
-      <div class="shot"><img src="shots/en-3.webp" width="660" height="1434" alt="A diorama of London on a snowy night" loading="lazy"></div>
-    </div>
-
-    <div class="feature">
-      <div>
-        <h2>Seven cities</h2>
-        <p class="cities">Tokyo, New York, Paris, London, Dubai, Singapore and Sydney</p>
-        <p>Open new cities with the coins you earn by focusing, or buy them one at a time.</p>
+      <div class="cat__col">
+        <div class="cat__head">
+          <div class="cat__label cat__label--blank" aria-hidden="true"></div>
+          <h3 class="cat__h jpd">ホーム画面にも、<wbr>あなたの<wbr>街</h3>
+          <p class="cat__p">小の<wbr>ウィジェットは<wbr>無料。<wbr>中と<wbr>大は <span class="nb">Nowtown Resident。</span></p>
+        </div>
+        <img class="cat__shot cat__shot--w" src="assets/shots/widgets-ja.webp" width="1137" height="600" loading="lazy" decoding="async" alt="大・中・小のウィジェット。大は東京、中はパリ、小はロンドンの箱庭">
       </div>
-      <div class="shot"><img src="shots/en-6.webp" width="660" height="1434" alt="The seven city dioramas" loading="lazy"></div>
     </div>
-
-    <h2>Made for</h2>
-    <p class="scenes"><span>Studying.</span><span>Working.</span><span>Reading.</span></p>
-    <p>The timer keeps going when the screen is off or you switch apps.</p>
-
-    <h2>Screens</h2>
-    <div class="strip">
-      <div class="shot"><img src="shots/en-4.webp" width="660" height="1434" alt="Rain, a fireplace, or your own music" loading="lazy"></div>
-      <div class="shot"><img src="shots/en-5.webp" width="660" height="1434" alt="A card for every session" loading="lazy"></div>
-      <div class="shot"><img src="shots/en-7.webp" width="660" height="1434" alt="Diorama widgets on the Home Screen" loading="lazy"></div>
+    <div class="cat__end">
+      <h3 class="cat__h cat__h--end jpd">広告は<wbr>ありません。</h3>
+      <p class="cat__p">集中の<wbr>邪魔に<wbr>なる<wbr>ものは、<wbr>入れていません。</p>
     </div>
+  </div>
+</section>
 
-    <h2>Price</h2>
-    <p>No ads. The focus timer, basic history, the small widget and the Lock Screen timer are free for everyone.</p>
-    <p>Nowtown Resident, our paid plan (monthly, yearly or one-time), adds the medium and large widgets, more focus sounds (noise and layering), detailed records, desk clock mode and more.</p>
-    <p class="note">iPhone (iOS 18 or later)</p>
-
-    <div class="cta-block">
-      <p class="release"><span class="dot"></span>Coming December 1, 2026. Pre-order now on the App Store</p>
-      <p class="cta-row"><a class="cta" href="https://apps.apple.com/app/id6824274766">Pre-order on the App Store</a></p>
+<!-- 8. 料金（S6 夜・ベール） -->
+<section class="price" id="price" data-stage="6" data-sharp="0">
+  <h2 class="h2 jpd">ダウンロードは<wbr>無料。</h2>
+  <div class="plans">
+    <div class="plan">
+      <p class="plan__tag">Free</p>
+      <h3 class="plan__h">無料</h3>
+      <ul class="dots">
+        <li>集中タイマー<wbr><span class="nb">（5〜120 分）</span></li>
+        <li>街づくりと <span class="nb">7 都市</span><wbr>（コインで<wbr>開ける）</li>
+        <li>現地の<wbr>天気と<wbr>時刻</li>
+        <li>街の<wbr>音・<wbr>集中の<wbr>音<wbr>（バックグラウンド再生）</li>
+        <li>基本の<wbr>記録・<wbr>試験日の<wbr>カウントダウン</li>
+        <li>小の<wbr>ウィジェット・<wbr>ロック画面の<wbr>残り<wbr>時間</li>
+        <li>広告なし</li>
+      </ul>
     </div>
+    <div class="plan plan--res">
+      <p class="plan__tag">Nowtown Resident</p>
+      <h3 class="plan__h">Nowtown Resident<span>任意の<wbr>有料プラン</span></h3>
+      <dl class="prices">
+        <div><dt>月額</dt><dd><b>¥300</b></dd></div>
+        <div><dt>年額</dt><dd><b>¥2,400</b></dd></div>
+        <div><dt>買い切り</dt><dd><b>¥4,800</b></dd></div>
+      </dl>
+      <p class="plan__note">月額と<wbr>年額は、<wbr>はじめての<wbr>方に <span class="nb">7 日間の</span><wbr>無料トライアルつき</p>
+      <ul class="dots">
+        <li>ノイズの<wbr>音<wbr>（重ねがけ）</li>
+        <li>中・<wbr>大の<wbr>ウィジェット</li>
+        <li>都市の<wbr>アプリアイコン</li>
+        <li>くわしい記録</li>
+        <li>置き時計モード</li>
+        <li>街の<wbr>写真と<wbr>タイムラプス</li>
+      </ul>
+    </div>
+  </div>
+  <ul class="trust">
+    <li><b>広告なし</b><span>集中の<wbr>画面に、<wbr>広告は<wbr>出ません。</span></li>
+    <li><b>やめても、<wbr>建った<wbr>分は<wbr>残る</b><span>途中で<wbr>終えても、<wbr>街は<wbr>減りません。</span></li>
+    <li><b>画面を<wbr>消しても<wbr>続く</b><span>タイマーは<wbr>終わりの<wbr>時刻から<wbr>数えています。</span></li>
+    <li><b>機種を<wbr>変えても<wbr>戻る</b><span>記録と<wbr>街は、<wbr>あなたの <span class="nb">iCloud に</span><wbr>保存されます。</span></li>
+  </ul>
+</section>
 
-    <h2 id="faq-en">Support</h2>
-    <p class="updated">Real weather. Real time.</p>
+<!-- 9. よくある質問・お問い合わせ（S6・濃いベール） -->
+<section class="faq" data-stage="6" data-sharp="0" data-veil="0.45">
+  <h2 class="h2 jpd" id="faq">よくある質問</h2>
+  <div class="qa">
+    <details><summary>街は<wbr>どうやって<wbr>育ちますか？</summary><p>その<wbr>街で<wbr>集中した<wbr>時間だけ、<wbr>ビルや<wbr>ランドマークの<wbr>工事が<wbr>進みます。<wbr>どの<wbr>現場も<wbr>一斉に<wbr>工事が<wbr>始まり、<wbr>集中を<wbr>終えた<wbr>ときに<wbr>完成した<wbr>建物が<wbr>姿を<wbr>見せます。<wbr>途中で<wbr>やめても、<wbr>建った<wbr>分は<wbr>なくなりません。</p></details>
+    <details><summary>天気や<wbr>時刻は<wbr>本物ですか？</summary><p>はい。<wbr>箱庭の<wbr>街の、<wbr>今の<wbr>天気と<wbr>時刻を<wbr>映しています<wbr>（天気は <span class="nb">Apple WeatherKit を</span><wbr>使っています）。</p></details>
+    <details><summary>ほかの<wbr>都市へ<wbr>行くには？</summary><p>集中して<wbr>ためた<wbr>コインで<wbr>開けるか、<wbr><span class="nb">1 都市ずつ購入できます。</span></p></details>
+    <details><summary>機種を<wbr>変えたら、<wbr>記録や<wbr>買った<wbr>ものは<wbr>どうなりますか？</summary><p>集中の<wbr>記録・<wbr>コイン・<wbr>開けた<wbr>都市・<wbr>工事の<wbr>進み具合は、<wbr>あなたの iCloud<wbr><span class="nb">（Apple ID）にも</span><wbr>保存されます。<wbr>新しい<wbr>機種で<wbr>同じ <span class="nb">Apple ID の</span> <span class="nb">iCloud に</span><wbr>サインインしていれば、<wbr>アプリを<wbr>入れると<wbr>そのまま<wbr>戻ります。<wbr>購入した<wbr>ものは、<wbr>アプリの<wbr>設定の<wbr>いちばん下に<wbr>ある<wbr>「購入を<wbr>復元」で<wbr>戻せます。</p></details>
+    <details><summary>サブスクリプションを<wbr>解約するには？</summary><p>端末の<wbr>「設定」<wbr><span class="nb">→ 自分の</span><wbr><span class="nb">名前 →</span><wbr>「サブスクリプション」<wbr><span class="nb">→ Nowtown から</span><wbr>解約できます。<wbr>期間が<wbr>終わる <span class="nb">24 時間前までに</span><wbr>解約すると、<wbr>次の<wbr>更新で<wbr>請求されません。</p></details>
+    <details><summary>ウィジェットや<wbr>ロック画面の<wbr>残り<wbr>時間が<wbr>出ません</summary><p>本アプリは <span class="nb">iOS 18 以降で</span><wbr>使えます。<wbr>ロック画面の<wbr>残り<wbr>時間<wbr><span class="nb">（Apple Watch も）と、</span><wbr>小の<wbr>ウィジェットは、<wbr>だれでも<wbr>使えます。<wbr>中と<wbr>大の<wbr>ウィジェットは <span class="nb">Nowtown Resident の</span><wbr>特典です<wbr>（住人で<wbr>ない<wbr>ときは、<wbr>景色と<wbr>都市名だけを<wbr>表示します）。<wbr>ウィジェットは、<wbr>ホーム画面を<wbr>長押しして<wbr>左上の<wbr>「編集」<wbr>→<wbr>「ウィジェットを<wbr>追加」<wbr><span class="nb">→ Nowtown から</span><wbr>置けます。</p></details>
+    <details><summary>アプリを<wbr>閉じても<wbr>音は<wbr>続きますか？</summary><p>集中している<wbr>あいだは<wbr>続きます。<wbr>右上の<wbr>音の<wbr>ボタンが<wbr>オンなら、<wbr>集中中に<wbr>アプリを<wbr>閉じても、<wbr>街の<wbr>音と<wbr>集中の<wbr>音が<wbr>集中の<wbr>終わりまで<wbr>流れます。<wbr>集中していない<wbr>とき<wbr>（ホーム・<wbr>休憩・<wbr>一時停止中）に<wbr>アプリを<wbr>閉じると、<wbr>音は<wbr>止まります。</p></details>
+    <details><summary><span class="nb">Nowtown Resident とは？</span></summary><p>有料の<wbr>プランです<wbr>（月額・<wbr>年額・<wbr>買い切り）。<wbr>中と<wbr>大の<wbr>ウィジェット、<wbr>都市の<wbr>アイコン、<wbr>くわしい<wbr>記録、<wbr>置き時計モード、<wbr>街の<wbr>写真と<wbr>動画、<wbr>集中の<wbr>音<wbr>（ノイズと<wbr>重ねがけ）が<wbr>使えます。<wbr>集中・<wbr>基本の<wbr>記録・<wbr>小の<wbr>ウィジェット・<wbr>ロック画面の<wbr>残り<wbr>時間・<wbr>閉じても<wbr>鳴る<wbr>音は、<wbr>だれでも<wbr>無料です。<wbr>ファミリー共有に<wbr>対応しています。</p></details>
+    <details><summary>画面を<wbr>消しても<wbr>集中は<wbr>続きますか？</summary><p>はい。<wbr>残り<wbr>時間は<wbr>終わる<wbr>時刻から<wbr>数えているので、<wbr>画面を<wbr>消しても、<wbr>ほかの<wbr>アプリを<wbr>開いても<wbr>続きます。</p></details>
+  </div>
+  <div class="contact">
+    <h2 class="h2 h2--s jpd" id="contact">お問い合わせ</h2>
+    <p>不具合や<wbr>ご意見は、<wbr>こちらへ<wbr>お送りください。<wbr>使っている<wbr>端末と <span class="nb">iOS の</span><wbr>バージョン、<wbr>どの<wbr>画面で<wbr>起きたかを<wbr>書いていただけると<wbr>助かります。</p>
+    <p><a class="mail" href="mailto:voidlabs.work@gmail.com">voidlabs.work@gmail.com</a></p>
+  </div>
+</section>
 
-    <h3>How does the city grow?</h3>
-    <p>Buildings and landmarks are built with the time you focus in that city. Every site starts at once, and finished buildings are revealed when you end a focus session. If you stop early, what has been built stays.</p>
+<!-- 10. 最後の CTA（S6・窓） -->
+<section class="get" id="get" data-stage="6" data-sharp="1">
+  <img class="get__icon" src="icon-180.png" width="96" height="96" alt="Nowtown のアプリアイコン" loading="lazy">
+  <h2 class="h2 jpd get__h">今日の <span class="nb">25 分から、</span><wbr>街を<wbr>ひとつ。</h2>
+  <div class="cta">
+    <a class="store" href="https://apps.apple.com/jp/app/id6824274766"><span data-pre>App Store で予約する</span><span data-post hidden>App Store で入手する</span><span class="store__arrow" aria-hidden="true">→</span></a>
+    <p class="cta__note"><span class="nb">2026年12月1日 配信・</span><wbr>ダウンロード無料・<wbr>iPhone<wbr><span class="nb">（iOS 18 以降）</span></p>
+  </div>
+</section>
 
-    <h3>Are the weather and time real?</h3>
-    <p>Yes. The diorama shows the current weather and local time of each city (weather by Apple WeatherKit).</p>
-
-    <h3>How do I visit other cities?</h3>
-    <p>Open them with the coins you earn by focusing, or buy them one at a time.</p>
-
-    <h3>I got a new device. What happens to my history and purchases?</h3>
-    <p>Your focus history, coins, unlocked cities and building progress are also saved to your iCloud (Apple ID). If you are signed in to iCloud with the same Apple ID on your new device, they come back when you install the App. To restore purchases, tap "Restore Purchases" at the bottom of Settings in the App.</p>
-
-    <h3>How do I cancel my subscription?</h3>
-    <p>Go to Settings → your name → Subscriptions → Nowtown. Cancel at least 24 hours before the end of the current period to avoid the next charge.</p>
-
-    <h3>The widget or the Lock Screen timer does not appear</h3>
-    <p>The App requires iOS 18 or later. The Lock Screen timer (including Apple Watch) and the small widget are free for everyone. The medium and large widgets are part of Nowtown Resident (without it, they show the view and the city name only). To add a widget, touch and hold the Home Screen, tap Edit → Add Widget → Nowtown.</p>
-
-    <h3>Does the sound continue when I close the App?</h3>
-    <p>During a focus session, yes. If the sound button at the top right is on, the city sound and focus sounds keep playing until the session ends, even after you close the App. When you are not focusing (Home, a break, or while paused), the sound stops when you close the App.</p>
-
-    <h3>What is Nowtown Resident?</h3>
-    <p>Our paid plan (monthly, yearly or one-time). It includes the medium and large widgets, city app icons, detailed records, desk clock mode, photos and video of your city, and more focus sounds (noise and layering). Focusing, basic history, the small widget, the Lock Screen timer and background sound are free for everyone. Family Sharing is supported.</p>
-
-    <h3>Does my session continue with the screen off?</h3>
-    <p>Yes. The timer counts down to the end time, so it keeps going when the screen is off or you switch apps.</p>
-
-    <h3 id="contact-en">Contact</h3>
-    <p>For bugs or feedback, please email us with your device model, iOS version and the screen where it happened.</p>
-    <p><a href="mailto:voidlabs.work@gmail.com">voidlabs.work@gmail.com</a></p>
-  </section>
-
-  <footer>© 2026 Kaito Iwaki</footer>
 </main>
+
+<footer class="ft" data-stage="6" data-sharp="1">
+  <nav class="ft__links" aria-label="フッター">
+    <a href="privacy.html">プライバシー</a>
+    <a href="terms.html">利用規約</a>
+    <a href="#faq">サポート</a>
+    <a href="#contact">お問い合わせ</a>
+    <a href="en/" hreflang="en" lang="en">English</a>
+  </nav>
+  <p class="ft__note">この<wbr>ページの<wbr>空は、<wbr>スクロールに<wbr>合わせた<wbr>演出です。<wbr>アプリでは、<wbr>各都市の<wbr>実際の<wbr>天気と<wbr>現地の<wbr>時刻が<wbr>映ります。</p>
+  <p class="ft__note">© 2026 Kaito Iwaki</p>
+  <p class="ft__note ft__tm">Apple、<wbr><span class="nb">Apple の</span><wbr>ロゴ、<wbr><span class="nb">iPhone は、</span><wbr>米国および他の<wbr>国々で<wbr>登録された <span class="nb">Apple Inc. の</span><wbr>商標です。<wbr><span class="nb">App Store は</span> <span class="nb">Apple Inc. の</span><wbr>サービスマークです。</p>
+</footer>
+
+<!-- 追従のダウンロードバー（モバイルだけ） -->
+<div class="bar" aria-hidden="true">
+  <img class="bar__icon" src="icon-180.png" width="36" height="36" alt="">
+  <p class="bar__text"><b>Nowtown</b><span>街が建つ、集中タイマー</span></p>
+  <a class="bar__btn" href="https://apps.apple.com/jp/app/id6824274766" tabindex="-1"><span data-pre>予約</span><span data-post hidden>入手</span></a>
+</div>
 </body>
 </html>
