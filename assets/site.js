@@ -24,7 +24,7 @@
   const soft = [...d.querySelectorAll('.sky__soft .sky__layer')];
   const sharp = [...d.querySelectorAll('.sky__sharp .sky__layer')];
   const clock = d.querySelector('[data-clock]'), wx = d.querySelector('[data-wx]');
-  const hd = d.querySelector('.hd'), dusk = d.getElementById('dusk');
+  const hd = d.querySelector('.hd'), dusk = d.getElementById('dusk'), spinLine = dusk && dusk.querySelector('.dusk__spin');
   if (!soft.length) return;
 
   // ---- Step 4：ピン留めした 1 台の箱庭が、スクロールで 25 分 → 2 時間 → 4 時間 → 7 時間と建つ
@@ -215,6 +215,157 @@
     };
   })();
 
+  // ---- #dusk：灯りがともった街が、スクロールに合わせて一周する（docs/site/spec.md の 2 章 6）
+  // 連番（assets/spin/、AVIF だけ）は、S5 の絵の中の箱庭のまわりの四角を切り出したもの。canvas 1 枚を .sky__sharp のいちばん上の、その四角の位置に置いて描く。
+  // コマ 0（と n）は描かない＝下の S5 のくっきりした絵。表示の向きは、スクロールが決めた向きを時定数 140ms で追い（アプリの慣性をまねる）、
+  // スクロールが止まると、いちばん近いコマへ寄って 1 枚で止まる（2 コマが重なった絵のまま止めない）。ループは動いている間だけ。
+  // 回さない：Save-Data・AVIF なし（html.no-spin。#dusk は前の 220vh）、動きを減らす設定（canvas も作らない）、S5 のくっきりした絵がまだ出ていない
+  const SPIN = {
+    // n：一周のコマ数、w・h：コマの画素、box：絵の中の四角（x0, y0, x1, y1）、縁のぼかし（コマの幅・高さに対する割合：左右・上・下）
+    port: { n: 24, w: 720, h: 780, box: [0, 0.35, 1, 0.85], fx: 0, ft: 0.03 / 0.5, fb: 0.03 / 0.5 },
+    land: { n: 36, w: 1260, h: 754, box: [0.15, 0.33, 0.85, 1], fx: 0.03 / 0.7, ft: 0.03 / 0.67, fb: 0 },
+  };
+  const P_LIT = 0.36, P_ROT = [0.42, 0.92], TAU = 140, TAU_SNAP = 80, IDLE = 60; // 追う時定数・寄せる時定数（ms）、スクロールが止まったとみなすまで（ms）
+  const spin = (() => {
+    let cv = null, g = null, kind = null, sets = {}, want = false, avif = null, gx = null, gy = null, rect = '';
+    let f = 0, ft = 0, on = false, raf3 = 0, prev = 0, lastMove = 0, lastSy = null, pass = null, shown = -1, key = '', drawN = 0, drawT = 0, single = false, held = true;
+    const can = () => !reduce.matches && !H.classList.contains('no-spin');
+    const smooth = (a) => { const x = clamp((a - 0.25) / 0.5); return x * x * (3 - 2 * x); };
+    // 読む順番：粗い方から（4 コマおき → 2 コマおき → 残り）。1 巡目（4 コマおき）がそろうまでは回さない
+    const order = (n) => { const o = []; for (const k of [4, 2, 1]) for (let i = k; i < n; i += k) if (!o.includes(i)) o.push(i); return o; };
+    const url = (k, i) => `${base.replace(/sky\/$/, 'spin/')}${k}-${String(i).padStart(2, '0')}.avif`;
+    const fetchSet = (k) => {
+      if (sets[k]) return;
+      const c = SPIN[k], st = sets[k] = { img: [], bmp: [], ok: [], q: order(c.n), busy: 0 };
+      const next = () => {
+        while (st.busy < 4 && st.q.length) {
+          const i = st.q.shift(), im = new Image(); st.busy++;
+          im.decoding = 'async'; im.fetchPriority = 'low'; im.src = url(k, i);
+          // 縦長（23 枚・展開で約 50 MB）は ImageBitmap で持つ。横長（35 枚・約 130 MB）は <img> のまま
+          im.decode().then(() => (k === 'port' && W.createImageBitmap ? createImageBitmap(im).catch(() => null) : null))
+            .then((b) => { st.img[i] = im; st.bmp[i] = b; st.ok[i] = true; }, () => {})
+            .then(() => { st.busy--; next(); if (k === kind) queue(); });
+        }
+      };
+      next();
+    };
+    const ready1 = (st, n) => { for (let i = 4; i < n; i += 4) if (!st.ok[i]) return false; return true; };
+    const make = () => {
+      cv = d.createElement('canvas'); cv.className = 'spin-fx'; cv.setAttribute('aria-hidden', 'true');
+      d.querySelector('.sky__sharp').appendChild(cv); g = cv.getContext('2d');
+    };
+    // 縁のぼかし（描いた後に destination-in で不透明度を落とす。CSS の mask は使わない）
+    const grads = () => {
+      const c = SPIN[kind];
+      gx = null; if (c.fx) { gx = g.createLinearGradient(0, 0, c.w, 0); gx.addColorStop(0, 'rgba(0,0,0,0)'); gx.addColorStop(c.fx, '#000'); gx.addColorStop(1 - c.fx, '#000'); gx.addColorStop(1, 'rgba(0,0,0,0)'); }
+      gy = g.createLinearGradient(0, 0, 0, c.h); gy.addColorStop(0, 'rgba(0,0,0,0)'); gy.addColorStop(c.ft, '#000');
+      if (c.fb) { gy.addColorStop(1 - c.fb, '#000'); gy.addColorStop(1, 'rgba(0,0,0,0)'); } else gy.addColorStop(1, '#000');
+    };
+    const place = () => {
+      if (!cv) return;
+      const sky = d.querySelector('.sky'), F = fit(sky.clientWidth, sky.clientHeight), c = SPIN[F.k], [x0, y0, x1, y1] = c.box;
+      const box = [F.ox + x0 * F.iw, F.oy + y0 * F.ih, (x1 - x0) * F.iw, (y1 - y0) * F.ih].map((v) => v.toFixed(2) + 'px'), bk = box.join();
+      if (bk !== rect) { rect = bk; Object.assign(cv.style, { left: box[0], top: box[1], width: box[2], height: box[3] }); } // 変わったときだけ書く（measure は画像の読み込みのたびに呼ばれる）
+      if (F.k !== kind) {
+        // 画面を回して組（縦長・横長）が変わったら、新しい組を読む
+        kind = F.k; cv.width = c.w; cv.height = c.h; grads(); key = ''; pass = null;
+        if (want) fetchSet(kind);
+      }
+    };
+    const hide = () => { if (shown !== 0) { shown = 0; cv.style.visibility = 'hidden'; } };
+    const src = (st, i) => st.bmp[i] || st.img[i];
+    // 位置 x（コマの単位、0 < x < n）の絵：両隣の、読めているコマの間を溶かす（コマ 0・n は下の S5 の絵なので、canvas 全体の不透明度で溶かす）
+    const draw = (x) => {
+      const c = SPIN[kind], st = sets[kind], n = c.n;
+      let lo = Math.floor(x), hi = Math.ceil(x);
+      while (lo > 0 && !st.ok[lo]) lo--;
+      while (hi < n && !st.ok[hi]) hi++;
+      const a = hi > lo ? (x - lo) / (hi - lo) : 0, m = single ? (a < 0.5 ? 0 : 1) : smooth(a);
+      let A = lo, B = hi, mm = m, op = 1;
+      if (lo === 0 && hi === n) op = 0;
+      else if (lo === 0) { A = hi; mm = 0; op = m; } else if (hi === n) { mm = 0; op = 1 - m; }
+      if (op <= 0) { hide(); return; }
+      const k = `${A},${B},${mm.toFixed(3)}`;
+      if (k !== key) {
+        key = k;
+        const t0 = performance.now();
+        g.globalCompositeOperation = 'copy'; g.globalAlpha = 1;
+        if (mm < 1) g.drawImage(src(st, A), 0, 0, c.w, c.h);
+        if (mm > 0) { g.globalCompositeOperation = mm < 1 ? 'source-over' : 'copy'; g.globalAlpha = mm; g.drawImage(src(st, B), 0, 0, c.w, c.h); g.globalAlpha = 1; }
+        g.globalCompositeOperation = 'destination-in';
+        if (gx) { g.fillStyle = gx; g.fillRect(0, 0, c.w, c.h); }
+        g.fillStyle = gy; g.fillRect(0, 0, c.w, c.h);
+        g.globalCompositeOperation = 'source-over';
+        // 遅い端末：最初の 10 回の平均が 24ms を超えたら、溶かすのをやめて近いコマ 1 枚だけに
+        if (drawN < 10) { drawT += performance.now() - t0; if (++drawN === 10 && drawT / 10 > 24) single = true; }
+      }
+      const o = +op.toFixed(3);
+      if (o <= 0) { hide(); return; }
+      if (shown !== o) { if (shown <= 0) cv.style.visibility = 'visible'; shown = o; cv.style.opacity = o; }
+    };
+    // 止まったときに寄る先：いちばん近い、読めているコマ（0・n は下の絵）
+    const near = (x) => {
+      const st = sets[kind], n = SPIN[kind].n; let lo = Math.floor(x), hi = Math.ceil(x);
+      while (lo > 0 && !st.ok[lo]) lo--;
+      while (hi < n && !st.ok[hi]) hi++;
+      return x - lo <= hi - x ? lo : hi;
+    };
+    const frame = (now) => {
+      raf3 = 0;
+      const dt = prev ? Math.min(100, now - prev) : 16; prev = now;
+      const n = SPIN[kind].n, idle = now - lastMove > IDLE, goal = idle ? near(ft) : ft;
+      f += (goal - f) * (1 - Math.exp(-dt / (idle ? TAU_SNAP : TAU)));
+      const done = Math.abs(goal - f) < 0.002;
+      if (done) f = goal;
+      if (f > 0 && f < n) draw(f); else hide();
+      if (done && idle) { on = false; prev = 0; } else raf3 = requestAnimationFrame(frame);
+    };
+    return {
+      // #grow が近づいた（または #features が見えた）ら読み始める
+      start() {
+        want = true;
+        if (!can() || avif === false) return;
+        if (avif == null) return; // S0 のくっきりした絵が読めたときに、もう一度（AVIF が使えるかは、その currentSrc で見る）
+        if (!cv) { make(); kind = null; place(); }
+        fetchSet(kind);
+      },
+      // くっきりした絵が 1 枚読めたとき：AVIF が使えないブラウザでは回さない（#dusk も前の 220vh に）
+      avif(img) {
+        if (avif != null) return;
+        avif = /\.avif(\?|$)/.test(img.currentSrc || '');
+        if (!avif) { H.classList.add('no-spin'); measure(); } else if (want) this.start();
+      },
+      resize() { if (cv) { const r0 = rect, k0 = kind; place(); if (rect !== r0 || kind !== k0) { key = ''; if (on || shown > 0) queue(); } } },
+      // 毎フレーム（tick）：p は #dusk の進み（0〜1）、vis は #dusk が画面にかかっているか、t は空のステージ
+      set(p, vis, t, sy) {
+        if (!cv) return;
+        const st = sets[kind];
+        // ImageBitmap は、空が 4〜5 の隣から外れたら手放す（<img> は持っているので、戻ったら作り直す）
+        if (st && kind === 'port') {
+          if ((t < 3.5 || t > 5.5) && st.bmp.some(Boolean)) st.bmp = st.bmp.map((b) => { b && b.close(); return null; });
+          else if (t >= 3.5 && t <= 5.5 && W.createImageBitmap) st.img.forEach((im, i) => { if (im && !st.bmp[i] && !st.mk) { st.mk = 1; createImageBitmap(im).then((b) => { st.bmp[i] = b; }, () => {}).then(() => { st.mk = 0; }); } });
+        }
+        const n = SPIN[kind].n, nt = n * clamp((p - P_ROT[0]) / (P_ROT[1] - P_ROT[0]));
+        // ピン留めの外から飛び込んだとき（ページ内リンクなど）は、追いかけずにその向きへ
+        const jump = lastSy == null || Math.abs(sy - lastSy) > W.innerHeight;
+        lastSy = sy;
+        const stop = () => { ft = f = nt; if (raf3) cancelAnimationFrame(raf3); raf3 = 0; on = false; hide(); };
+        if (!(can() && vis && st && sharp[5] && sharp[5].dataset.ready)) { pass = null; stop(); return; }
+        // 回り始め（止まった向きから動き出す）とき、1 巡目（4 コマおき）がそろっていなければ、その回は回さない（止まった絵のまま。止まった向きへ戻ったら、また見る）
+        if ((ft <= 0 || ft >= n) && nt > 0 && nt < n) pass = ready1(st, n);
+        if (nt <= 0 || nt >= n) { if (pass === false) f = nt; pass = null; }
+        if (pass === false) { stop(); return; }
+        if (nt !== ft) lastMove = performance.now();
+        ft = nt;
+        if (jump) f = ft;
+        if (!on) { on = true; prev = 0; raf3 = requestAnimationFrame(frame); }
+      },
+      // 進み p での、文の不透明度と空のステージ（回すときは、灯りは p 0〜0.36）
+      lit: (p) => (can() ? clamp(p / P_LIT) : p),
+      line: (p, t) => (can() ? clamp((p - 0.40) / 0.05) : clamp((t - 4.45) / 0.12)),
+    };
+  })();
+
   // ---- ページの最後（A：押し上げ）。フッターの上端 − 6px が台座の下の角に届いたら、そこから空の 2 層（.sky__soft・.sky__sharp）を
   // フッターと一緒に上へずらす（--end-y、スクロールと 1:1）。塔の先はヘッダーの下 12px（68px）までしか上げない。
   // 設計書は「フッターの上端 ＋ 16px」。それだと英語（リンクが 1 行でフッターが 51px 低い）の 390×844 で、箱庭の上の空が画面の 32% になった（基準は 30% 以下）。
@@ -233,7 +384,7 @@
   };
 
   // ---- sharp の読み込み（現在のステージの前後だけ。decode が済んでから出す）
-  const ready = (L) => { L.dataset.ready = '1'; L.classList.add('is-new'); setTimeout(() => L.classList.remove('is-new'), 600); queue(); };
+  const ready = (L) => { L.dataset.ready = '1'; L.classList.add('is-new'); setTimeout(() => L.classList.remove('is-new'), 600); spin.avif(L.querySelector('img')); queue(); };
   const decode = (L) => {
     const img = L.querySelector('img');
     const go = () => (img.decode ? img.decode() : Promise.resolve()).then(() => ready(L), () => {});
@@ -270,6 +421,14 @@
       const f = fit(skyEl.clientWidth, skyEl.clientHeight), port = f.k === 'port';
       E = { B: f.oy + (port ? 0.733 : 0.828) * f.ih, max: Math.max(0, f.oy + (port ? 0.417 : 0.40) * f.ih - 68), ft: ft.getBoundingClientRect().top + y0, cta: getCta ? getCta.getBoundingClientRect().top + y0 : null };
     }
+    spin.resize();
+    // 「アプリでは、指で回して…」の 1 行の上端：PC は台座の下の角 + 48px（画面の下端から 48px より下へは行かない）、モバイルは見出しの下 12px
+    if (spinLine) {
+      let v;
+      if (mobile.matches) { const c = dusk.querySelector('.dusk__copy'); v = Math.round(c.offsetTop + c.offsetHeight + 12); }
+      else { const f = fit(skyEl.clientWidth, skyEl.clientHeight), b = f.oy + (f.k === 'port' ? 0.733 : 0.828) * f.ih; v = Math.round(Math.min(b + 48, W.innerHeight - 48 - spinLine.offsetHeight)); }
+      if (dusk.style.getPropertyValue('--spin-y') !== v + 'px') dusk.style.setProperty('--spin-y', v + 'px');
+    }
     zones = [...d.querySelectorAll('[data-stage],[data-stage-from]')].map((el) => {
       const r = el.getBoundingClientRect();
       if (!r.height) return null;
@@ -292,7 +451,10 @@
   };
   const value = (z, y, sy) => {
     let t = z.from;
-    if (z.pin) t = lerp(z.from, z.to, clamp((sy - z.top) / Math.max(1, z.h - W.innerHeight)));
+    if (z.pin) {
+      const p = clamp((sy - z.top) / Math.max(1, z.h - W.innerHeight));
+      t = lerp(z.from, z.to, z.el === dusk ? spin.lit(p) : p); // #dusk：回すときは、灯りは p 0〜0.36 で（その後の一周のあいだ S5 のまま）
+    }
     return [t, z.sh, z.veil];
   };
   const sample = (y, sy) => {
@@ -345,10 +507,13 @@
     if (dusk) {
       const z = zones.find((c) => c.el === dusk);
       if (z && z.pin) {
-        const p = clamp((sy - z.top) / Math.max(1, z.h - W.innerHeight));
-        // 空が薄暮（S5）へ半分以上移ってから文字を出す（夕焼けの淡い空の上では cream の字が読めないため）
-        dusk.style.setProperty('--dusk-o', clamp((p - 0.45) / 0.12).toFixed(3));
-      } else dusk.style.removeProperty('--dusk-o');
+        const p = clamp((sy - z.top) / Math.max(1, z.h - W.innerHeight)), u = spin.lit(p);
+        // 空が薄暮（S5）へ半分以上移ってから文字を出す（夕焼けの淡い空の上では cream の字が読めないため）。t − 4 = u
+        dusk.style.setProperty('--dusk-o', clamp((u - 0.45) / 0.12).toFixed(3));
+        dusk.style.setProperty('--spin-o', spin.line(p, 4 + u).toFixed(3));
+        // 一周は、#dusk が画面にかかっている間だけ
+        spin.set(p, sy + W.innerHeight > z.top && sy < z.top + z.h, t, sy);
+      } else { dusk.style.removeProperty('--dusk-o'); dusk.style.removeProperty('--spin-o'); spin.set(0, false, t, sy); }
     }
     if (G) growTick(sy);
     if (R) s3Tick(sy);
@@ -371,6 +536,12 @@
   d.querySelectorAll('main img').forEach((i) => i.complete || i.addEventListener('load', measure, { once: true }));
   load(0);
   measure();
+
+  // ---- 一周の連番を読み始める：#grow の上端が、画面の下端から画面 1 枚ぶんの所まで来たとき（下から戻ってきたときのために、#features が見えたときも）
+  if ('IntersectionObserver' in W && dusk && !saveData && !reduce.matches) {
+    const io2 = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io2.disconnect(); spin.start(); } }, { rootMargin: '0px 0px 100% 0px' });
+    [grow, d.getElementById('features')].forEach((el) => el && io2.observe(el));
+  }
 
   // ---- ヒーローの CTA が見えなくなったら：ヘッダーの「予約する」と、モバイルの追従バー
   const bar = d.querySelector('.bar'), cta = d.querySelector('#hero-cta .store') || d.getElementById('hero-cta'), get = d.getElementById('get');

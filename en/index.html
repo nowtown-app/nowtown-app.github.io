@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>document.documentElement.classList.add('js');</script>
+<script>document.documentElement.classList.add('js');if(navigator.connection&&navigator.connection.saveData)document.documentElement.classList.add('no-spin');</script>
 <title>Nowtown: Focus Timer That Builds a Tiny City (iPhone)</title>
 <meta name="description" content="Nowtown is a focus timer for iPhone that builds a tiny diorama city while you focus. Seven cities with real weather and local time. Coming December 1, 2026. Pre-order on the App Store.">
-<link rel="canonical" href="https://kaitoiwaki.github.io/nowtown-site/en/">
-<link rel="alternate" hreflang="ja" href="https://kaitoiwaki.github.io/nowtown-site/">
-<link rel="alternate" hreflang="en" href="https://kaitoiwaki.github.io/nowtown-site/en/">
-<link rel="alternate" hreflang="x-default" href="https://kaitoiwaki.github.io/nowtown-site/">
+<link rel="canonical" href="https://nowtown-app.github.io/en/">
+<link rel="alternate" hreflang="ja" href="https://nowtown-app.github.io/">
+<link rel="alternate" hreflang="en" href="https://nowtown-app.github.io/en/">
+<link rel="alternate" hreflang="x-default" href="https://nowtown-app.github.io/">
 <meta name="theme-color" content="#101320">
 <meta name="apple-itunes-app" content="app-id=6824274766">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://kaitoiwaki.github.io/nowtown-site/en/">
+<meta property="og:url" content="https://nowtown-app.github.io/en/">
 <meta property="og:title" content="Nowtown: Focus Timer That Builds a Tiny City">
 <meta property="og:description" content="Time you focus becomes a city. A focus timer for iPhone that builds a tiny diorama city while you focus. Coming December 1, 2026. Pre-order on the App Store.">
-<meta property="og:image" content="https://kaitoiwaki.github.io/nowtown-site/og-en.png">
+<meta property="og:image" content="https://nowtown-app.github.io/og-en.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="en_US">
@@ -28,11 +28,11 @@
 // 最初の空（S0）のくっきりした絵を先に読む。Save-Data のときは読まない（ぼかした絵だけ）
 (function(d,p){if(navigator.connection&&navigator.connection.saveData)return;[['(min-aspect-ratio: 2/3)','land',1600,2560],['(max-aspect-ratio: 2/3)','port',720,1080]].forEach(function(v){var l=d.createElement('link');l.rel='preload';l.as='image';l.type='image/avif';l.media=v[0];l.setAttribute('imagesizes','100vw');l.setAttribute('fetchpriority','high');l.setAttribute('imagesrcset',p+'s0-'+v[1]+'-sharp-'+v[2]+'.avif '+v[2]+'w, '+p+'s0-'+v[1]+'-sharp-'+v[3]+'.avif '+v[3]+'w');d.head.appendChild(l);});})(document,'../assets/sky/');
 </script>
-<link rel="stylesheet" href="../assets/site.css?v=271fb46b">
+<link rel="stylesheet" href="../assets/site.css?v=b673b936">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Nowtown","operatingSystem":"iOS 18","applicationCategory":"ProductivityApplication","description":"A focus timer for iPhone that builds a tiny diorama city while you focus.","url":"https://kaitoiwaki.github.io/nowtown-site/en/","installUrl":"https://apps.apple.com/app/id6824274766","datePublished":"2026-12-01","inLanguage":"en","offers":{"@type":"Offer","price":0,"priceCurrency":"JPY"}}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Nowtown","operatingSystem":"iOS 18","applicationCategory":"ProductivityApplication","description":"A focus timer for iPhone that builds a tiny diorama city while you focus.","url":"https://nowtown-app.github.io/en/","installUrl":"https://apps.apple.com/app/id6824274766","datePublished":"2026-12-01","inLanguage":"en","offers":{"@type":"Offer","price":0,"priceCurrency":"JPY"}}
 </script>
-<script src="../assets/site.js?v=91e20471" defer></script>
+<script src="../assets/site.js?v=2d975636" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -166,6 +166,8 @@
       <p class="label dusk__label">Tokyo 16:40 → 17:20</p>
       <h2 class="dusk__h">By dusk, the city you built lights up.</h2>
     </div>
+    <!-- 回り始めの直前に出る 1 行（サイトの絵は触れない。アプリでは指で回せる）。回さないとき（Save-Data・動きを減らす・JS なし）も出す -->
+    <p class="dusk__spin"><svg class="dusk__spin-i" viewBox="0 0 18 18" width="18" height="18" aria-hidden="true" focusable="false"><path d="M12.5 6.04A7 4 0 1 0 15.06 11.5M12.1 12l2.96-.5-.54 2.95"/></svg>In the app, drag to turn the city.</p>
   </div>
 </section>
 

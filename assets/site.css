@@ -97,7 +97,7 @@ html:not(.js) .sky__sharp { display: none; }
 .sky__layer[data-i="2"] { background: linear-gradient(#8ebad9, #ccd3d9, #d4d7da, #d6d8db, #d6d8db); }
 .sky__layer[data-i="3"] { background: linear-gradient(#a2b0cd, #bbbec8, #c5c6cc, #c9cacf, #c9c9cf); }
 .sky__layer[data-i="4"] { background: linear-gradient(#5e78b4, #d19e90, #d3b4ab, #d0bcb7, #d0bbb7); }
-.sky__layer[data-i="5"] { background: linear-gradient(#1a1e4c, #955474, #793f5d, #5a2e4a, #5c2f4b); }
+.sky__layer[data-i="5"] { background: linear-gradient(#1a1e4c, #945373, #773f5c, #592d49, #5a2f4a); }
 .sky__layer[data-i="6"] { background: linear-gradient(#091e41, #2d3240, #212532, #161c29, #171c29); }
 @media (max-aspect-ratio: 2/3) {
   .sky__layer[data-i="0"] { background: linear-gradient(#494475, #8e7aac, #60567d, #60567c, #665b84); }
@@ -105,7 +105,7 @@ html:not(.js) .sky__sharp { display: none; }
   .sky__layer[data-i="2"] { background: linear-gradient(#a2c1d9, #cfd5d9, #d6d9db, #d6d9db, #d6d8db); }
   .sky__layer[data-i="3"] { background: linear-gradient(#aeb2ca, #b6b7c3, #c6c6cc, #c6c6cc, #c4c5cb); }
   .sky__layer[data-i="4"] { background: linear-gradient(#8383b1, #d59f8b, #cfbebb, #cebdba, #d0bbb7); }
-  .sky__layer[data-i="5"] { background: linear-gradient(#463156, #9e5978, #522944, #512944, #5d2f4b); }
+  .sky__layer[data-i="5"] { background: linear-gradient(#453156, #9d5978, #522944, #512944, #5d2f4b); }
   .sky__layer[data-i="6"] { background: linear-gradient(#152648, #2f3441, #141926, #131826, #161b29); }
 }
 /* sky:end */
@@ -367,7 +367,11 @@ html:not(.js) :is(.note, .grow) { --note-ink: var(--cream); --note-label: var(--
 .grow__meter { display: none; }
 
 /* ---------- 6. 見せ場（ピン留め） ---------- */
+/* 灯り（p 0〜0.36）→ ひと呼吸 → 一周（0.42〜0.92）→ 止まる。動く距離 200vh（site.js の spin）。
+   回さないとき（html.no-spin：Save-Data・AVIF なし）と JS なしは、前と同じ 220vh（p 0〜1 で灯り） */
 .dusk { height: 220vh; }
+.js .dusk { height: 300vh; }
+.js.no-spin .dusk { height: 220vh; }
 .dusk__pin { position: sticky; top: 0; height: 100svh; overflow: hidden; }
 .dusk__copy {
   position: absolute; right: clamp(32px, 5vw, 80px); top: 50%; transform: translateY(-50%);
@@ -385,6 +389,20 @@ html:not(.js) :is(.note, .grow) { --note-ink: var(--cream); --note-label: var(--
 :lang(en) .dusk__copy { flex-direction: column; align-items: flex-end; gap: 14px; width: min(28vw, 380px); text-align: right; }
 :lang(en) .dusk__label, :lang(en) .dusk__h { writing-mode: horizontal-tb; }
 :lang(en) .dusk__h { font-size: clamp(28px, 3vw, 44px); line-height: 1.25; letter-spacing: .01em; text-wrap: balance; } /* 最後の行が「up.」だけにならない */
+/* 「アプリでは、指で回して眺められます。」：回り始めの直前に出る 1 行（--spin-o）。1 行に収める。
+   PC は箱庭の真下・左右の中央（上端 = 台座の下の角 + 48px、画面の下端から 48px より下へは行かない）。モバイルは見出しのすぐ下（12px）。
+   どちらも上端は site.js が --spin-y で渡す（resize の時だけ測る）。JS なしは画面の下から 48px */
+.dusk__spin {
+  position: absolute; left: 50%; top: var(--spin-y, auto); transform: translateX(-50%);
+  display: flex; align-items: center; gap: 7px; width: max-content; margin: 0; white-space: nowrap;
+  font: 400 14px/1.6 var(--f-text); letter-spacing: .04em; color: rgba(244, 240, 232, .85);
+  text-shadow: 0 0 18px rgba(16, 19, 32, .5);
+  opacity: var(--spin-o, 1);
+}
+html:not(.js) .dusk__spin { top: auto; bottom: 48px; }
+.dusk__spin-i { flex: none; width: 18px; height: 18px; fill: none; stroke: var(--lamp); stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
+/* 一周の絵（site.js が .sky__sharp のいちばん上に作る canvas）。位置と大きさは、空の絵の中の箱庭のまわりの四角に合わせて site.js が px で書く */
+.spin-fx { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; visibility: hidden; }
 
 /* ---------- 7. 機能：展示の目録（docs/site/spec.md の 11 章） ----------
    カードはやめ、空の上に直接書く（手順の解説と同じ手：等幅のラベル → 真鍮の罫線と鋲 → 見出し → 本文）。
@@ -644,6 +662,7 @@ html:not(.js) :is(.note, .grow) { --note-ink: var(--cream); --note-label: var(--
   .dusk__h, :lang(en) .dusk__h { font-size: 24px; line-height: 1.5; letter-spacing: .06em; }
   :lang(en) .dusk__h { letter-spacing: .01em; line-height: 1.3; }
   .dusk__h span + span { margin-top: 0; }
+  .dusk__spin { font-size: 13px; }
 
   /* 目録：1 列（組と組の間 72px）。本文は幅いっぱい */
   .feat { padding: 96px var(--gutter) 48px; }
@@ -819,9 +838,9 @@ html:not(.js) :is(.note, .grow) { --note-ink: var(--cream); --note-label: var(--
 
 /* ---------- 動きを減らす ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .dusk { height: auto; }
+  .dusk, .js .dusk { height: auto; }
   .dusk__pin { position: relative; }
-  .dusk__copy { opacity: 1 !important; }
+  .dusk__copy, .dusk__spin { opacity: 1 !important; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
   .js .note.reveal::before, .js :is(.note, .cat__head).reveal :is(.note__label, .cat__label, .note__h, .note__p, .cat__h, .cat__p) { opacity: 1; transform: none; transition: none; }
   .js :is(.note, .cat__head).reveal :is(.note__label, .cat__label)::after { transform: none; transition: none; }
